@@ -36,20 +36,25 @@ operator {addition1}|{addition2}|{subtraction1}|{subtraction2}|{multiplication}|
 reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do|double|else|extends|false|for|if|implements|int|long|main|new|print|private|protected|public|return|short|static|string|switch|this|true|try|void|while
 
 /* Identifiers */
-
+id [a-zA-Z][a-zA-Z0-9]+$
 
 /* Integer Constants */
-integer [+-][0-9]*
+integer [+-]?[0-9]+$
 
 /* Float Constants */
-
+float [+-]?[0-9]*\.[0-9]+|[+-]?[0-9]*\.[0-9]+[eE][+-][0-9]+
 
 /* String Constants */
-
+string \"*\"
 
 /* Whitespace */
-space [ \t]
+space [\ \t]
 eol \n
+
+/* Comments */
+c_style \/\**\*\/
+cpp_style \/\/.*\n
+comment {c_style}|{cpp_style}
 
 %%
 
@@ -57,12 +62,19 @@ eol \n
 	print(lineCount, charCount, yytext, "symbol" );
     charCount += yyleng;
 }
+
 {operator} {
 	print(lineCount, charCount, yytext, "operator");
 	charCount += yyleng;
 }
+
 {reserved_word} {
 	print(lineCount, charCount, yytext, "reserved word" );
+    charCount += yyleng;
+}
+
+{id} {
+	print(lineCount, charCount, yytext, "id" );
     charCount += yyleng;
 }
 
@@ -70,16 +82,29 @@ eol \n
 	print(lineCount, charCount, yytext, "integer" );
     charCount += yyleng;
 }
+{float} {
+	print(lineCount, charCount, yytext, "float" );
+    charCount += yyleng;
+}
 
 {space} {
+	printf("space!\n");
 	charCount++;
 }
+
 {eol}   {
 	lineCount++;
 	charCount = 1;
 }
 
+{comment} {
+    
+	print(lineCount, charCount, yytext, "comment" );
+    charCount += yyleng;
+}
+
 . {
+	printf("error!\n");
 	charCount++;
 }
 
