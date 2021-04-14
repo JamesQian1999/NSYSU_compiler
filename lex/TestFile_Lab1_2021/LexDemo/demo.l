@@ -36,7 +36,7 @@ operator {addition1}|{addition2}|{subtraction1}|{subtraction2}|{multiplication}|
 reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do|double|else|extends|false|for|if|implements|int|long|main|new|print|private|protected|public|return|short|static|string|switch|this|true|try|void|while
 
 /* Identifiers */
-id [a-zA-Z][a-zA-Z0-9]+$
+id [a-zA-Z_\$][a-zA-Z0-9]*
 
 /* Integer Constants */
 integer [+-]?[0-9]+$
@@ -45,14 +45,16 @@ integer [+-]?[0-9]+$
 float [+-]?[0-9]*\.[0-9]+|[+-]?[0-9]*\.[0-9]+[eE][+-][0-9]+
 
 /* String Constants */
-string \"*\"
+string \".*\\.*\"
 
 /* Whitespace */
-space [\ \t]
+tab \t
+blank [\ ]
+space {tab}|{blank}
 eol \n
 
 /* Comments */
-c_style \/\**\*\/
+c_style "/*".*"/*"
 cpp_style \/\/.*\n
 comment {c_style}|{cpp_style}
 
@@ -82,13 +84,19 @@ comment {c_style}|{cpp_style}
 	print(lineCount, charCount, yytext, "integer" );
     charCount += yyleng;
 }
+
 {float} {
 	print(lineCount, charCount, yytext, "float" );
     charCount += yyleng;
 }
 
+{string} {
+    print(lineCount, charCount, yytext, "string" );
+    charCount += yyleng;
+}
+
 {space} {
-	printf("space!\n");
+    printf("space!\n");
 	charCount++;
 }
 
@@ -98,7 +106,7 @@ comment {c_style}|{cpp_style}
 }
 
 {comment} {
-    
+
 	print(lineCount, charCount, yytext, "comment" );
     charCount += yyleng;
 }
