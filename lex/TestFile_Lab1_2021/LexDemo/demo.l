@@ -36,7 +36,8 @@ operator {addition1}|{addition2}|{subtraction1}|{subtraction2}|{multiplication}|
 reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do|double|else|extends|false|for|if|implements|int|long|main|new|print|private|protected|public|return|short|static|string|switch|this|true|try|void|while
 
 /* Identifiers */
-id [a-zA-Z_\$][a-zA-Z0-9]*
+id [a-zA-Z_][a-zA-Z0-9_]*
+invalid_id [0-9]+[a-zA-Z]+[a-zA-Z0-9_]*|[\^\#]+[a-zA-Z0-9_]*
 
 /* Integer Constants */
 integer [+-]?[0-9]+$
@@ -54,8 +55,8 @@ space {tab}|{blank}
 eol \n
 
 /* Comments */
-c_style "/*".*"/*"
-cpp_style \/\/.*\n
+c_style [/][*][^*]*[*]+([^\/\*][^\*]*[*]+)*\/
+cpp_style "//"(\/|\*|.)*
 comment {c_style}|{cpp_style}
 
 %%
@@ -77,6 +78,11 @@ comment {c_style}|{cpp_style}
 
 {id} {
 	print(lineCount, charCount, yytext, "id" );
+    charCount += yyleng;
+}
+
+{invalid_id} {
+	print(lineCount, charCount, yytext, "invalid id" );
     charCount += yyleng;
 }
 
@@ -105,10 +111,14 @@ comment {c_style}|{cpp_style}
 	charCount = 1;
 }
 
-{comment} {
+{c_style} {
 
-	print(lineCount, charCount, yytext, "comment" );
-    charCount += yyleng;
+	print(lineCount, charCount, yytext, "c_style_comment" );
+}
+
+{cpp_style} {
+
+	print(lineCount, charCount, yytext, "cpp_style_comment" );
 }
 
 . {
