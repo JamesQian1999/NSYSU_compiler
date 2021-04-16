@@ -1,15 +1,27 @@
 %{
 
 #include<stdio.h>
-#define MIN(a,b) (((a)<(b))?(a):(b))
-unsigned charCount = 1, idCount = 0, lineCount = 1, top;
-char **table;
+
+typedef struct NODE
+{
+    char *id;
+    struct NODE *next;
+}Node;
+
+typedef struct TABLE
+{
+    struct NODE *first;
+    struct NODE *last;
+}Table;
+
+unsigned charCount = 1, idCount = 0, lineCount = 1;
 void print(int line, int pos, char str[], char symbol[]);
 void create();
-int lookup(char s[]);
-void insert(char s[]);
+Node* lookup(char *s);
+void insert(char *s);
 void dump();
 int newline_comment(char yytext[]);
+Table *table;
 
 %}
 
@@ -42,20 +54,19 @@ id [a-zA-Z_][a-zA-Z0-9_]*
 invalid_id [0-9]+[a-zA-Z]+[a-zA-Z0-9_]*|[\^\#]+[a-zA-Z0-9_]*
 
 /* Integer Constants */
-integer [+-]?[0-9]+
+integer [+-]?[0-9]+$
 
 /* Float Constants */
 float [+-]?[0-9]*\.[0-9]+|[+-]?[0-9]*\.[0-9]+[eE][+-][0-9]+
 
 /* String Constants */
-string \"([^\'\\\"]|[\\][\"\'\\trnbf])*\"
-invalid_string \"([^\\][\\\']|[^\'\\\"]|[\\][\"\'\\trnbf])*\"
+string \".*\\.*\"
 
 /* Whitespace */
 tab \t
 blank [\ ]
 space {tab}|{blank}
-eol \n?\r?
+eol \n
 
 /* Comments */
 c_style [/][*][^*]*[*]+([^\/\*][^\*]*[*]+)*\/
@@ -105,11 +116,6 @@ comment {c_style}|{cpp_style}
     charCount += yyleng;
 }
 
-{invalid_string} {
-    print(lineCount, charCount, yytext, "invalid_string" );
-    charCount += yyleng;
-}
-
 {space} {
 	charCount++;
 }
@@ -122,7 +128,7 @@ comment {c_style}|{cpp_style}
 {comment} {
 
 	print(lineCount, charCount, yytext, "comment" );
-    lineCount += newline_comment(yytext);
+    charCount += newline_comment(yytext);
 }
 
 . {
@@ -146,40 +152,50 @@ void print(int line, int pos, char str[], char symbol[])
 
 void create()
 {
-    table = (char **)malloc(sizeof(void *));
-    top = 0;
+    table = (Table*)malloc(sizeof( struct TABLE ));
+    table->first = NULL;
+    table->last = NULL;
 }
 
-int lookup(char s[])
+Node* lookup(char *s)
 {
-    for (int i = 0 ; i <top ; i++)
+    Node *i;
+    int j;
+    for(i = table->first ; i!=NULL ; i = i->next)
     {
-        if(strlen(s) != strlen(table[i])) continue;
-        for(int j = 0 ; j <strlen(table[i]) ; j++)
-            if(table[i][j]!=s[j]) goto next;
-        return i;
-        next:;
-    } 
-    return -1;  
+        if(strlen(i->id)!=strlen(s)) continue;
+        for(j = 0 ; j < strlen(s) ; j++)
+            if(s[j] != i->id[j]) break;
+        if(j == strlen(s) ) return i;
+    }
+    return NULL;
 }
 
-void insert(char s[])
+void insert(char *s)
 {
-    if(lookup(s) != -1) return;
+    if(lookup(s) != NULL) return;
+
     char *id = (char*)malloc(sizeof(char)*strlen(s));
-    for(int i = 0 ; i<strlen(s) ; i++)
+    for(int i=0 ; i<strlen(s) ; i++)
         id[i] = s[i];
-    table[top] = (char *)malloc(strlen(s)*sizeof(char *));
-    table[top++] = id;
-    table = (char **)realloc(table, sizeof(void *)*(top+1));
+    Node *node = (Node*)malloc(sizeof(Node));
+    node->id = id;
+    node->next = NULL;
+    if(table->first == NULL)
+        table->first = node;
+    else
+        table->last->next = node;
+    table->last = node;
 }
 
 void dump()
 {
+    Node *i;
     printf("The symbol table contains:\n");
-    for(int i = 0 ; i < top ; i++)
-        printf("%s ",table[i]);
+    for(i = table->first ; i!=NULL ; i = i->next)
+        printf("%s ",i->id);
     printf("\n");
+
 }
 
 int newline_comment(char yytext[])
