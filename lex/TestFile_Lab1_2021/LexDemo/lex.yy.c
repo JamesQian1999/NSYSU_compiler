@@ -602,7 +602,6 @@ char *yytext;
 #line 2 "demo.l"
 
 #include<stdio.h>
-#define MIN(a,b) (((a)<(b))?(a):(b))
 unsigned charCount = 1, idCount = 0, lineCount = 1, top;
 char **table;
 void print(int line, int pos, char str[], char symbol[]);
@@ -612,7 +611,7 @@ void insert(char s[]);
 void dump();
 int newline_comment(char yytext[]);
 
-#line 616 "lex.yy.c"
+#line 615 "lex.yy.c"
 /* symbols */
 /* Arithmetic, Relational, and Logical Operators */
 /* Reserved words */
@@ -622,7 +621,7 @@ int newline_comment(char yytext[]);
 /* String Constants */
 /* Whitespace */
 /* Comments */
-#line 626 "lex.yy.c"
+#line 625 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -839,10 +838,10 @@ YY_DECL
 		}
 
 	{
-#line 65 "demo.l"
+#line 64 "demo.l"
 
 
-#line 846 "lex.yy.c"
+#line 845 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -901,7 +900,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 67 "demo.l"
+#line 66 "demo.l"
 {
 	print(lineCount, charCount, yytext, "symbol" );
     charCount += yyleng;
@@ -909,7 +908,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 72 "demo.l"
+#line 71 "demo.l"
 {
 	print(lineCount, charCount, yytext, "operator");
 	charCount += yyleng;
@@ -917,7 +916,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 77 "demo.l"
+#line 76 "demo.l"
 {
 	print(lineCount, charCount, yytext, "reserved word" );
     charCount += yyleng;
@@ -925,7 +924,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 82 "demo.l"
+#line 81 "demo.l"
 {
 	print(lineCount, charCount, yytext, "id" );
     insert(yytext);
@@ -934,7 +933,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 88 "demo.l"
+#line 87 "demo.l"
 {
 	print(lineCount, charCount, yytext, "invalid id" );
     charCount += yyleng;
@@ -942,7 +941,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 93 "demo.l"
+#line 92 "demo.l"
 {
 	print(lineCount, charCount, yytext, "integer" );
     charCount += yyleng;
@@ -950,7 +949,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 98 "demo.l"
+#line 97 "demo.l"
 {
 	print(lineCount, charCount, yytext, "float" );
     charCount += yyleng;
@@ -959,7 +958,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 103 "demo.l"
+#line 102 "demo.l"
 {
     print(lineCount, charCount, yytext, "string" );
     charCount += yyleng;
@@ -968,7 +967,7 @@ YY_RULE_SETUP
 case 9:
 /* rule 9 can match eol */
 YY_RULE_SETUP
-#line 108 "demo.l"
+#line 107 "demo.l"
 {
     print(lineCount, charCount, yytext, "invalid_string" );
     charCount += yyleng;
@@ -976,7 +975,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 113 "demo.l"
+#line 112 "demo.l"
 {
 	charCount++;
 }
@@ -984,7 +983,7 @@ YY_RULE_SETUP
 case 11:
 /* rule 11 can match eol */
 YY_RULE_SETUP
-#line 117 "demo.l"
+#line 116 "demo.l"
 {
 	lineCount++;
 	charCount = 1;
@@ -993,7 +992,7 @@ YY_RULE_SETUP
 case 12:
 /* rule 12 can match eol */
 YY_RULE_SETUP
-#line 122 "demo.l"
+#line 121 "demo.l"
 {
 
 	print(lineCount, charCount, yytext, "comment" );
@@ -1002,7 +1001,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 128 "demo.l"
+#line 127 "demo.l"
 {
 	printf("error!\n");
 	charCount++;
@@ -1010,10 +1009,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 133 "demo.l"
+#line 132 "demo.l"
 ECHO;
 	YY_BREAK
-#line 1017 "lex.yy.c"
+#line 1016 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2018,7 +2017,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 133 "demo.l"
+#line 132 "demo.l"
 
 
 int main(){

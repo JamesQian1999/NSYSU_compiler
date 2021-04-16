@@ -1,7 +1,6 @@
 %{
 
 #include<stdio.h>
-#define MIN(a,b) (((a)<(b))?(a):(b))
 unsigned charCount = 1, idCount = 0, lineCount = 1, top;
 char **table;
 void print(int line, int pos, char str[], char symbol[]);
