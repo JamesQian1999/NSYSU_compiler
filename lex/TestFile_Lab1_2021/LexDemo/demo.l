@@ -57,7 +57,7 @@ space {tab}|{blank}
 eol \n?\r?
 
 /* Comments */
-c_style [/][*][^*]*[*]+([^\/\*][^\*]*[*]+)*\/
+c_style \/\*[^\*]*\*+([^\/\*][^\*]*\*+)*\/
 cpp_style "//"(\/|\*|.)*
 comment {c_style}|{cpp_style}
 

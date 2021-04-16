@@ -2078,3 +2078,4 @@ int newline_comment(char yytext[])
             ans++;
     return ans;
 }
+
