@@ -38,13 +38,13 @@ reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do
 
 /* Identifiers */
 id [a-zA-Z_\$][a-zA-Z0-9_\$]*
-invalid_id [0-9]+[a-zA-Z\$]+[a-zA-Z0-9_\$]*|[\^\#]+[a-zA-Z0-9_\$]*
+invalid_id [0-9]+[a-zA-Z\$\^\#]+[a-zA-Z0-9_\$\^\#]*|[\^\#]+[a-zA-Z0-9_\$\^\#]*
 
 /* Integer Constants */
 integer [+-]?[0-9]+
 
 /* Float Constants */
-float [+-]?[0-9]*\.[0-9]+|[+-]?[0-9]*\.[0-9]+[eE][+-][0-9]+
+float [+-]?[0-9]*\.[0-9]+f?|[+-]?[0-9]*\.[0-9]+[eE][+-][0-9]+f?
 
 /* String Constants */
 string \"([^\'\\\"]|[\\][\"\'\\trnbf])*\"
@@ -54,7 +54,7 @@ invalid_string \"([^\\][\\\']|[^\'\\\"]|[\\][\"\'\\trnbf])*\"
 tab \t
 blank [\ ]
 space {tab}|{blank}
-eol \n?\r?
+eol \r?\n
 
 /* Comments */
 c_style \/\*[^\*]*\*+([^\/\*][^\*]*\*+)*\/
@@ -113,7 +113,7 @@ comment {c_style}|{cpp_style}
 	charCount++;
 }
 
-{eol}   {
+{eol}   {   
 	lineCount++;
 	charCount = 1;
 }
@@ -125,7 +125,7 @@ comment {c_style}|{cpp_style}
 }
 
 . {
-    printf("Line: %d, 1st char: %d, \"%s\" is a ERROR!\n",lineCount, charCount, yytext);
+    printf("Line: %d, 1st char: %d, \"%s\" is ERROR!\n",lineCount, charCount, yytext);
 	charCount++;
 }
 
