@@ -49,32 +49,121 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    COMMA = 258,
-    NUM = 259,
-    ADD = 260,
-    COLON = 261,
-    a = 262,
-    NEW = 263
+    TYPE = 258,
+    VOID = 259,
+    STATIC = 260,
+    FINAL = 261,
+    CLASS = 262,
+    MAIN = 263,
+    NEW = 264,
+    PUBLIC = 265,
+    PROTECTED = 266,
+    PRIVATE = 267,
+    READ = 268,
+    PRINT = 269,
+    CONST = 270,
+    IF = 271,
+    ELSEIF = 272,
+    ELSE = 273,
+    SWITCH = 274,
+    CASE = 275,
+    BREAK = 276,
+    DEFAULT = 277,
+    FOR = 278,
+    DO = 279,
+    WHILE = 280,
+    CONTINUE = 281,
+    RETURN = 282,
+    SEMICOLON = 283,
+    COLON = 284,
+    COMMA = 285,
+    DOT = 286,
+    LEFTTMB = 287,
+    LEFTBRK = 288,
+    RIGHTBRK = 289,
+    RIGHTTMB = 290,
+    LEFTTB = 291,
+    RIGHTTB = 292,
+    EQUAL = 293,
+    DOUBLEPLUS = 294,
+    DOUBLEMINUS = 295,
+    PLUS = 296,
+    MINUS = 297,
+    MULTIPLY = 298,
+    DIVIDE = 299,
+    INFIXOP = 300,
+    SYMBOL = 301,
+    AND = 302,
+    OR = 303,
+    INT = 304,
+    FLOAT = 305,
+    INVALID = 306,
+    ID = 307,
+    STRING = 308
   };
 #endif
 /* Tokens.  */
-#define COMMA 258
-#define NUM 259
-#define ADD 260
-#define COLON 261
-#define a 262
-#define NEW 263
+#define TYPE 258
+#define VOID 259
+#define STATIC 260
+#define FINAL 261
+#define CLASS 262
+#define MAIN 263
+#define NEW 264
+#define PUBLIC 265
+#define PROTECTED 266
+#define PRIVATE 267
+#define READ 268
+#define PRINT 269
+#define CONST 270
+#define IF 271
+#define ELSEIF 272
+#define ELSE 273
+#define SWITCH 274
+#define CASE 275
+#define BREAK 276
+#define DEFAULT 277
+#define FOR 278
+#define DO 279
+#define WHILE 280
+#define CONTINUE 281
+#define RETURN 282
+#define SEMICOLON 283
+#define COLON 284
+#define COMMA 285
+#define DOT 286
+#define LEFTTMB 287
+#define LEFTBRK 288
+#define RIGHTBRK 289
+#define RIGHTTMB 290
+#define LEFTTB 291
+#define RIGHTTB 292
+#define EQUAL 293
+#define DOUBLEPLUS 294
+#define DOUBLEMINUS 295
+#define PLUS 296
+#define MINUS 297
+#define MULTIPLY 298
+#define DIVIDE 299
+#define INFIXOP 300
+#define SYMBOL 301
+#define AND 302
+#define OR 303
+#define INT 304
+#define FLOAT 305
+#define INVALID 306
+#define ID 307
+#define STRING 308
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 12 "b073021024.y"
+#line 7 "b073021024.y"
 
-    float floatVal;
-    int intVal;
+	char *name;
 
-#line 78 "y.tab.h"
+#line 167 "y.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

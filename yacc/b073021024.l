@@ -9,13 +9,20 @@ int lookup(char s[]);
 void insert(char s[]);
 %}
 
+
+/* type */
+type char|float|int|long|short|string|boolean
+
 /* symbols */
 Comma \,
 Colon \:
 Semicolon \;
-Parentheses \(|\)
-square_brackets \[|\]
-Brackets \{|\}
+Parentheses_l \(
+Parentheses_r \)
+square_brackets_l \[
+square_brackets_r \]
+Brackets_l \{
+Brackets_r \}
 
 /* Arithmetic, Relational, and Logical Operators */
 add \+ 
@@ -25,18 +32,18 @@ subsub \-\-
 mul \*
 div \/|\%
 assignment \=
+and \&\&
+or \|\|
+
 lt \<
 lte \<\=
 gt \>
 gte \>\=
 eq \=\=
 neq \!\=
-and \&\&
-or \|\|
 not \!
+Condition {lt}|{lte}|{gt}|{eq}|{neq}|{not}
 
-/* Reserved words */
-reserved_word abstract|assert|boolean|break|byte|case|catch|char|class|const|default|do|double|else|enum|extends|false|final|finally|float|for|goto|if|implements|import|instanceof|int|interface|long|native|new|null|package|private|protected|public|return|short|static|strictfp|super|switch|synchronized|this|throw|throws|transient|true|try|void|volatile|while|continue
 
 /* Identifiers */
 id [a-zA-Z_\$][a-zA-Z0-9_\$]*
@@ -63,95 +70,245 @@ c_style \/\*[^\*]*\*+([^\/\*][^\*]*\*+)*\/
 cpp_style \/\/.*
 comment {c_style}|{cpp_style}
 
+
 %%
+ 
+{type} {
+    printf("%s",yytext);
+    return TYPE;
+}
+
+void {
+    printf("%s",yytext);
+    return VOID;
+}
+
+static {
+    printf("%s",yytext);
+    return STATIC;
+}
+
+final {
+    printf("%s",yytext);
+    return FINAL;
+}
+
+class {
+    printf("%s",yytext);
+    return CLASS;
+}
+
+main {
+    printf("%s",yytext);
+    return MAIN;
+}
+
+new {
+    printf("%s",yytext);
+    return NEW;
+}
+
+public {
+    printf("%s",yytext);
+    return PUBLIC;
+}
+
+protected {
+    printf("%s",yytext);
+    return PROTECTED;
+}
+
+private {
+    printf("%s",yytext);
+    return PRIVATE;
+}
+
+read {
+    printf("%s",yytext);
+    return READ;
+}
+
+print {
+    printf("%s",yytext);
+    return PRINT;
+}
+
+const {
+    printf("%s",yytext);
+    return CONST;
+}
+
+if {
+    printf("%s",yytext);
+    return IF;
+}
+
+elseif {
+    printf("%s",yytext);
+    return ELSEIF;
+}
+
+case {
+    printf("%s",yytext);
+    return CASE;
+}
+
+break {
+    printf("%s",yytext);
+    return BREAK;
+}
+
+default {
+    printf("%s",yytext);
+    return DEFAULT;
+}
+
+for {
+    printf("%s",yytext);
+    return FOR;
+}
+
+do {
+    printf("%s",yytext);
+    return DO;
+}
+
+while {
+    printf("%s",yytext);
+    return WHILE;
+}
+
+continue {
+    printf("%s",yytext);
+    return CONTINUE;
+}
+
+return {
+    printf("%s",yytext);
+    return RETURN;
+}
+
+{Semicolon} {
+    printf("%s",yytext);
+    return SEMICOLON;
+}
+
+{Colon} {
+    printf("%s",yytext);
+    return COLON;
+}
 
 {Comma} {
     printf("%s",yytext);
     return COMMA;
 }
-{Colon} {
+
+\. {
     printf("%s",yytext);
-    
+    return DOT;
 }
-{Semicolon} {
+
+{square_brackets_l} {
     printf("%s",yytext);
+    return LEFTTMB;
 }
-{Parentheses} {
+{square_brackets_r} {
     printf("%s",yytext);
+    return RIGHTTMB;
 }
-{square_brackets} {
+
+{Brackets_l} {
     printf("%s",yytext);
+    return LEFTBRK;
 }
-{Brackets} {
+{Brackets_r} {
     printf("%s",yytext);
+    return RIGHTBRK;
+}
+
+{Parentheses_l} {
+    printf("%s",yytext);
+    return LEFTTB;
+}
+{Parentheses_r} {
+    printf("%s",yytext);
+    return RIGHTTB;
+}
+
+{assignment} {
+    printf("%s",yytext);
+    return EQUAL;
+}
+
+{addadd} {
+    printf("%s",yytext);
+    return DOUBLEPLUS; 
+}
+
+{subsub} {
+    printf("%s",yytext);
+    return DOUBLEMINUS;
 }
 
 {add} {
     printf("%s",yytext);
-    
+    return PLUS;
 }
-{addadd} {
-    printf("%s",yytext);
-}
+
 {sub} {
     printf("%s",yytext);
+    return MINUS;
 }
-{subsub} {
-    printf("%s",yytext);
-}
+
 {mul} {
     printf("%s",yytext);
+    return MULTIPLY;
 }
+
 {div} {
     printf("%s",yytext);
+    return DIVIDE;
 }
-{assignment} {
-    printf("%s",yytext);
-}
-{lt} {
-    printf("%s",yytext);
-}
-{lte} {
-    printf("%s",yytext);
-}
-{gt} {
-    printf("%s",yytext);
-}
-{gte} {
-    printf("%s",yytext);
-}
-{eq} {
-    printf("%s",yytext);
-}
-{neq} {
-    printf("%s",yytext);
-}
+
 {and} {
     printf("%s",yytext);
+    return AND;
 }
+
 {or} {
     printf("%s",yytext);
+    return OR;
 }
-{not} {
+
+{integer} {
     printf("%s",yytext);
+    return INT;
+}
+
+{float} {
+    printf("%s",yytext);
+    return FLOAT;
 }
 
 {id} {
     printf("%s",yytext);
     if(table == NULL) create();
+    return ID;
 }
 
-{integer} {
+{invalid_id} {
     printf("%s",yytext);
-    return NUM;
-}
-{float} {
-    printf("%s",yytext);
-    
+    return INVALID;
 }
 
 {string} {
     printf("%s",yytext);
+    return STRING;
+}
+
+{Condition} {
+    printf("%s",yytext);
+    return INFIXOP;
 }
 
 {space} {
@@ -159,7 +316,6 @@ comment {c_style}|{cpp_style}
 }
 {eol} {
     printf("\nLine %d : ",++lineCount);
-    return NEW;
 }
 
 {comment} {
@@ -167,7 +323,6 @@ comment {c_style}|{cpp_style}
 }
 
 . {
-	return a;
 }
 
 %%
@@ -221,6 +376,3 @@ void insert(char s[])
     table[top++] = id;
     table = (char **)realloc(table, sizeof(void *)*(top+1));
 }
-
-// sscanf(yytext, "%d", &yylval.intVal);
-// sscanf(yytext, "%f", &yylval.floatVal);
