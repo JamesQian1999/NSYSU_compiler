@@ -2,6 +2,7 @@
 	#include<stdio.h>
 	void yyerror(const char*);
 	int yylex();
+	int f = -1;
 	char *yytext;
 %}
 %union{
@@ -23,7 +24,7 @@ dec_list: dec
 error_dec: dec_list dec 
 		   {printf("\n> A syntax error at \"%s\".",yytext);};
 dec: STATIC TYPE idlist 
-   | TYPE idlist 
+   | TYPE idlist
    | array 
    | FINAL TYPE idlist 
    | class_dec 
@@ -33,7 +34,13 @@ dec: STATIC TYPE idlist
    | def;
 
 //variables
-idlist: ID 
+idlist: ID {
+		//printf(" ==>%s %d<== ",$1,strlen($1));
+		int tmp = lookup($1);
+		if(f == tmp)
+			printf("\n> \'%s\' is a duplicate indentifier.",$1);
+		f = tmp;
+		}
 	  | idlist COMMA ID 
       | ID LEFTTMB const_expr RIGHTTMB EQUAL expression
 	  | ID EQUAL expression 
@@ -162,7 +169,7 @@ boolean_expr: expression INFIXOP expression
 			| boolean_expr OR boolean_expr
             | error RIGHTTB;
 loop: WHILE LEFTTB boolean_expr RIGHTTB simple 
-	| WHILE LEFTTB boolean_expr RIGHTTB compound 
+	| WHILE LEFTTB boolean_expr RIGHTTB compound
 	| FOR LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB simple
     | FOR LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB LEFTBRK compound_list RIGHTBRK
 	| LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB compound 

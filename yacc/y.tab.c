@@ -71,9 +71,10 @@
 	#include<stdio.h>
 	void yyerror(const char*);
 	int yylex();
+	int f = -1;
 	char *yytext;
 
-#line 77 "y.tab.c"
+#line 78 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -231,11 +232,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 7 "b073021024.y"
+#line 8 "b073021024.y"
 
 	char *name;
 
-#line 239 "y.tab.c"
+#line 240 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -615,19 +616,19 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    19,    19,    20,    21,    22,    23,    25,    26,    27,
-      28,    29,    30,    31,    32,    33,    36,    37,    38,    39,
-      40,    41,    42,    44,    48,    50,    53,    54,    57,    58,
-      59,    60,    61,    62,    65,    66,    67,    68,    69,    70,
-      71,    72,    73,    76,    77,    78,    79,    80,    81,    82,
-      83,    86,    87,    88,    89,    90,    91,    92,    93,    94,
-      95,    98,    99,   100,   101,   102,   103,   104,   108,   109,
-     110,   111,   112,   113,   114,   115,   116,   119,   120,   121,
-     122,   123,   126,   127,   128,   129,   130,   131,   132,   133,
-     134,   135,   136,   137,   138,   139,   140,   141,   142,   143,
-     144,   145,   146,   149,   150,   151,   154,   155,   156,   157,
-     160,   161,   162,   163,   164,   165,   166,   167,   168,   169,
-     170,   171,   172,   173,   174,   177
+       0,    20,    20,    21,    22,    23,    24,    26,    27,    28,
+      29,    30,    31,    32,    33,    34,    37,    44,    45,    46,
+      47,    48,    49,    51,    55,    57,    60,    61,    64,    65,
+      66,    67,    68,    69,    72,    73,    74,    75,    76,    77,
+      78,    79,    80,    83,    84,    85,    86,    87,    88,    89,
+      90,    93,    94,    95,    96,    97,    98,    99,   100,   101,
+     102,   105,   106,   107,   108,   109,   110,   111,   115,   116,
+     117,   118,   119,   120,   121,   122,   123,   126,   127,   128,
+     129,   130,   133,   134,   135,   136,   137,   138,   139,   140,
+     141,   142,   143,   144,   145,   146,   147,   148,   149,   150,
+     151,   152,   153,   156,   157,   158,   161,   162,   163,   164,
+     167,   168,   169,   170,   171,   172,   173,   174,   175,   176,
+     177,   178,   179,   180,   181,   184
 };
 #endif
 
@@ -1705,31 +1706,43 @@ yyreduce:
   switch (yyn)
     {
   case 6:
-#line 24 "b073021024.y"
+#line 25 "b073021024.y"
                    {printf("\n> A syntax error at \"%s\".",yytext);}
-#line 1711 "y.tab.c"
+#line 1712 "y.tab.c"
+    break;
+
+  case 16:
+#line 37 "b073021024.y"
+           {
+		//printf(" ==>%s %d<== ",$1,strlen($1));
+		int tmp = lookup((yyvsp[0].name));
+		if(f == tmp)
+			printf("\n> \'%s\' is a duplicate indentifier.",(yyvsp[0].name));
+		f = tmp;
+		}
+#line 1724 "y.tab.c"
     break;
 
   case 22:
-#line 43 "b073021024.y"
+#line 50 "b073021024.y"
                 {printf("\n> \"%s\" is an invalid \"id\".\n",yytext);}
-#line 1717 "y.tab.c"
+#line 1730 "y.tab.c"
     break;
 
   case 23:
-#line 45 "b073021024.y"
+#line 52 "b073021024.y"
                 {printf("> \"%s\" is an invalid \"id\".\n",yytext);}
-#line 1723 "y.tab.c"
+#line 1736 "y.tab.c"
     break;
 
   case 24:
-#line 49 "b073021024.y"
+#line 56 "b073021024.y"
                   {printf("\n> a syntax error that need a comma between two variables at \"%s\".\n",yytext);}
-#line 1729 "y.tab.c"
+#line 1742 "y.tab.c"
     break;
 
 
-#line 1733 "y.tab.c"
+#line 1746 "y.tab.c"
 
       default: break;
     }
@@ -1961,7 +1974,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 180 "b073021024.y"
+#line 187 "b073021024.y"
 
 
 

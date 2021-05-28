@@ -3,10 +3,12 @@
 #include<stdio.h>
 int newline_comment(char yytext[]);
 char **table = NULL;
-unsigned charCount = 1, idCount = 0, lineCount = 1,top;
+char* id;
+unsigned charCount = 1, idCount = 0, lineCount = 1,top=0;
 void create();
 int lookup(char s[]);
 void insert(char s[]);
+void dump();
 %}
 
 
@@ -293,6 +295,10 @@ return {
 {id} {
     printf("%s",yytext);
     if(table == NULL) create();
+    char *id = (char*)malloc(sizeof(char)*strlen(yytext));
+    strcpy(id,yytext);
+    yylval.name = id;
+    insert(yytext);
     return ID;
 }
 
@@ -368,11 +374,30 @@ int lookup(char s[])
 
 void insert(char s[])
 {
-    if(lookup(s) != -1) return;
+    for (int i = 0 ; i <top ; i++)
+    {
+        if(strlen(s) != strlen(table[i])) continue;
+        for(int j = 0 ; j <strlen(table[i]) ; j++)
+            if(table[i][j]!=s[j]) goto next;
+        return ;
+        next:;
+    } 
+
     char *id = (char*)malloc(sizeof(char)*strlen(s));
     for(int i = 0 ; i<strlen(s) ; i++)
         id[i] = s[i];
     table[top] = (char *)malloc(strlen(s)*sizeof(char *));
     table[top++] = id;
     table = (char **)realloc(table, sizeof(void *)*(top+1));
+    //printf("\n");
+    //dump();
+    //printf("\n");
+}
+
+void dump()
+{
+    printf("The symbol table contains:\n");
+    for(int i = 0 ; i < top ; i++)
+        printf("%s ",table[i]);
+    printf("\n");
 }
