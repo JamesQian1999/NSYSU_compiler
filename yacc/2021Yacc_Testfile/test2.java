@@ -7,6 +7,11 @@ class Point
     int x ;
     void clear()
     {
+        if(i==0){
+//--------------ELSE WITHOUT IF
+                else
+                    i = 1;
+            }
         x = 0 ;
         y = 0 ;
     }
