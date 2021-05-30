@@ -194,7 +194,7 @@ bool: expression INFIXOP expression
 			 // a&&b
 			| bool OR bool
 			 // a||b
-            | error Parentheses_r{yyerror;};
+            | error Brackets_l{yyerror;};
 			 // error detect
 loop: WHILE Parentheses_l bool Parentheses_r  simple 
 		// while(a<b) ...
