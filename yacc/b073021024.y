@@ -1,16 +1,22 @@
 %{
+
 	#include<stdio.h>
-	void yyerror(const char*);
-	int yylex();
-	int f = -1;
-	char *yytext;
+	void yyerror(const char*); // handles error
+	int lookup(char s[]); // check symbol table
+	int yylex(); // declare lex
+	int f = -1; // for duplicate identifier
+	char *yytext; 
+	unsigned charCount, lineCount; // line num and position
+
 %}
+
 %union{
-	char *name;
+	char *name; // define type
 }
 
-%token <name> TYPE VOID STATIC FINAL CLASS MAIN NEW PUBLIC PROTECTED PRIVATE READ PRINT CONST IF ELSEIF ELSE SWITCH CASE BREAK DEFAULT FOR DO WHILE CONTINUE RETURN SEMICOLON COLON COMMA DOT LEFTTMB LEFTBRK RIGHTBRK RIGHTTMB LEFTTB RIGHTTB EQUAL DOUBLEPLUS DOUBLEMINUS PLUS MINUS MULTIPLY DIVIDE INFIXOP SYMBOL AND OR INT FLOAT INVALID ID STRING 
-%type <name> compound_list return forupdateopt forinitopt loop boolean_expr conditional method_call method_invocation const_expr postfixop prefixop factor term def expression expr_list name simple compound stmt stmt_list argument main method_modifier method classname class_dec object_dec array invaldid idlist dec error_dec dec_list
+//define token and type
+%token <name> TYPE VOID STATIC FINAL CLASS MAIN NEW PUBLIC PROTECTED PRIVATE READ PRINT CONST IF ELSEIF ELSE SWITCH CASE BREAK DEFAULT FOR DO WHILE CONTINUE RETURN SEMICOLON COLON COMMA DOT square_brackets_l Brackets_l Brackets_r square_brackets_r Parentheses_l Parentheses_r EQUAL DOUBLEPLUS DOUBLEMINUS PLUS MINUS MULTIPLY DIVIDE INFIXOP SYMBOL AND OR INT FLOAT INVALID ID STRING 
+%type <name> compound_list return forupdateopt forinitopt loop bool conditional method_call method_invocation const postfix prefix factor term def expression expr_list name  simple compound stmt stmt_list argument main method_type method class object array idlist dec dec_list
 
 
 %%
@@ -19,75 +25,93 @@
 //decaration
 dec_list: dec 
 		| dec_list SEMICOLON dec 
-		| dec_list class_dec 
-		| error_dec;
-error_dec: dec_list dec 
-		   {printf("\n> A syntax error at \"%s\".",yytext);};
+		| dec_list class 
+		| dec_list dec;
 dec: STATIC TYPE idlist 
-   | TYPE idlist
-   | array 
-   | FINAL TYPE idlist 
-   | class_dec 
-   | object_dec 
-   | method
-   | main
-   | def;
-
-//variables
-idlist: ID {
-		//printf(" ==>%s %d<== ",$1,strlen($1));
-		int tmp = lookup($1);
+   | TYPE idlist { // handles duplicate indentifier.
+		int tmp = lookup($2);
 		if(f == tmp)
-			printf("\n> \'%s\' is a duplicate indentifier.",$1);
+			printf("\n> \'%s\' is a duplicate indentifier.",$2);
 		f = tmp;
 		}
+   | FINAL TYPE idlist 
+   | array 
+   | main
+   | method
+   | class 
+   | object
+   | object dec { //handles SEMICOLON error
+	   printf("\nLine %d, 1st char: %d, a syntax error at \"%s\"",lineCount,charCount-5,$2);}
+   | def;
+
+//variable
+idlist: ID 
 	  | idlist COMMA ID 
-      | ID LEFTTMB const_expr RIGHTTMB EQUAL expression
+      | ID square_brackets_l const square_brackets_r EQUAL expression
 	  | ID EQUAL expression 
 	  | idlist COMMA ID EQUAL expression 
-	  | invaldid 
-	  | INVALID 
-	  	{printf("\n> \"%s\" is an invalid \"id\".\n",yytext);}
-	  | idlist COMMA INVALID 
-	  	{printf("> \"%s\" is an invalid \"id\".\n",yytext);};
+	  | ID ID SEMICOLON
+		  {	  // handles comma error
+			  printf("\nLine %d, 1st char: %d, a syntax error at \"%s\"",lineCount,charCount-2,$2);}; 
 
-//error statement of invalid ID
-invaldid: idlist ID 
-		  {printf("\n> a syntax error that need a comma between two variables at \"%s\".\n",yytext);}; 
-array: TYPE LEFTTMB RIGHTTMB ID EQUAL NEW TYPE LEFTTMB INT RIGHTTMB;
+//array
+array: TYPE square_brackets_l square_brackets_r ID EQUAL NEW TYPE square_brackets_l INT square_brackets_r;
 
-//object build
-object_dec: classname ID EQUAL NEW classname LEFTTB RIGHTTB 
-		  | TYPE ID LEFTTB RIGHTTB compound;
+//main
+main: MAIN Parentheses_l Parentheses_r compound  // e.g. main()
+	| MAIN Parentheses_l argument Parentheses_r compound // e.g. main(int argc)
+	| TYPE MAIN Parentheses_l Parentheses_r compound // e.g. main(int argc)
+	| VOID MAIN Parentheses_l Parentheses_r compound // e.g. viod main()
+	| TYPE MAIN Parentheses_l argument Parentheses_r compound  // e.g. int main(int argc)
+	| VOID MAIN Parentheses_l argument Parentheses_r compound; // e.g. viod main(int argc)
+	// main declaration
+argument: TYPE ID // e.g. int i
+		| TYPE ID COMMA argument; // e.g. int i,j;
+		//function argument
 
-//class definition
-class_dec: CLASS classname LEFTBRK dec_list SEMICOLON method RIGHTBRK 
-		 | CLASS classname LEFTBRK dec_list SEMICOLON main RIGHTBRK 
-		 | CLASS classname LEFTBRK dec_list SEMICOLON RIGHTBRK 
-		 | CLASS classname LEFTBRK dec_list RIGHTBRK
-		 | CLASS classname LEFTBRK dec_list SEMICOLON stmt_list SEMICOLON RIGHTBRK;
-classname: ID;
 
-//method declaration
-method: method_modifier TYPE ID LEFTTB argument RIGHTTB LEFTBRK stmt_list RIGHTBRK 
-	  | TYPE ID LEFTTB argument RIGHTTB LEFTBRK stmt_list RIGHTBRK 
-	  | method_modifier TYPE ID LEFTTB RIGHTTB LEFTBRK stmt_list RIGHTBRK 
-	  | TYPE ID LEFTTB RIGHTTB LEFTBRK stmt_list RIGHTBRK 
-	  | VOID ID LEFTTB RIGHTTB argument LEFTBRK stmt_list RIGHTBRK 
-	  | VOID ID LEFTTB RIGHTTB compound;
-method_modifier: PUBLIC 
-			   | PROTECTED 
-			   | PRIVATE;
+//method
+method: method_type TYPE ID Parentheses_l argument Parentheses_r Brackets_l stmt_list Brackets_r 
+		// e.g. public int test(int i) { ... }
+	  | TYPE ID Parentheses_l argument Parentheses_r Brackets_l stmt_list Brackets_r 
+	  	// e.g. int test(int i) { ... }
+	  | method_type TYPE ID Parentheses_l Parentheses_r Brackets_l stmt_list Brackets_r 
+	  	// e.g. public int test() { ... }
+	  | TYPE ID Parentheses_l Parentheses_r Brackets_l stmt_list Brackets_r 
+	    // e.g.  int test() { ... }
+	  | VOID ID Parentheses_l Parentheses_r argument Brackets_l stmt_list Brackets_r 
+	   // e.g.  viod test(int i) { ... }
+	  | VOID ID Parentheses_l Parentheses_r compound;
+	   // e.g.  viod test(int i) { ... }
+	  //function declaration
+method_type: PUBLIC 
+		   | PROTECTED 
+		   | PRIVATE;
+method_invocation: name Parentheses_l expr_list Parentheses_r 
+					// e.g. test(1,2)
+				 | name Parentheses_l Parentheses_r;
+				 	// e.g. test()
+method_call: method_invocation SEMICOLON;
+					// e.g. test(1,2);
 
-//main declaration
-main: MAIN LEFTTB RIGHTTB compound 
-	| MAIN LEFTTB argument RIGHTTB compound 
-	| TYPE MAIN LEFTTB RIGHTTB compound 
-	| VOID MAIN LEFTTB RIGHTTB compound 
-	| TYPE MAIN LEFTTB argument RIGHTTB compound 
-	| VOID MAIN LEFTTB argument RIGHTTB compound;
-argument: TYPE ID 
-		| TYPE ID COMMA argument;
+//class
+class: CLASS ID Brackets_l dec_list SEMICOLON method Brackets_r 
+		// e.g. class test { <dec_list> ; <methed> }
+	 | CLASS ID Brackets_l dec_list SEMICOLON main Brackets_r 
+	    // e.g. class test { <dec_list> ; <main> }
+	 | CLASS ID Brackets_l dec_list SEMICOLON Brackets_r 
+	    // e.g. class test { <dec_list> ; }
+	 | CLASS ID Brackets_l dec_list Brackets_r
+	    // e.g. class test { <dec_list> }
+	 | CLASS ID Brackets_l dec_list SEMICOLON stmt_list SEMICOLON Brackets_r;
+	    // e.g. class test { <dec_list> ; ... }
+	//class declaration
+
+//object
+object: ID ID EQUAL NEW ID Parentheses_l Parentheses_r
+		// e.g. Point lowerLeft = new Point();
+	  | TYPE ID Parentheses_l Parentheses_r compound;
+	  	// e.g. int test() { ... }
 
 //statements
 stmt_list: stmt 
@@ -102,23 +126,26 @@ stmt: compound
 	| method_call;
 
 //compound
-compound: LEFTBRK compound_list RIGHTBRK
+compound: Brackets_l compound_list Brackets_r
+			// e.g. {...}
 		| loop;
+			// for, while...
 compound_list: dec_list SEMICOLON 
             | stmt_list
             | stmt_list SEMICOLON
             | dec_list SEMICOLON compound_list
             | stmt_list compound_list
 
-
-//simple
-simple: name EQUAL expression 
-      | name LEFTTMB const_expr RIGHTTMB postfixop SEMICOLON
-	  | PRINT LEFTTB expression RIGHTTB 
-	  | READ LEFTTB name RIGHTTB
+// simple (one line)
+ simple: name EQUAL expression 
+		// a = ;b
+      | name square_brackets_l const square_brackets_r postfix SEMICOLON
+	  | PRINT Parentheses_l expression Parentheses_r 
+	  | READ Parentheses_l name Parentheses_r
 	  | name DOUBLEPLUS 
 	  | name DOUBLEMINUS 
-	  | PRINT LEFTTB STRING factor RIGHTTB;
+	  | PRINT Parentheses_l STRING factor Parentheses_r;
+	  	// e.g. print("aa%s",a)
 name: ID 
 	| ID DOT ID;
 
@@ -127,72 +154,92 @@ expr_list: expression COMMA expr_list
 		 | expression;
 expression: term 
 		  | expression PLUS term 
+		  	// e.g. ... +2/2
 		  | expression MINUS term;
+		  	// e.g. ... -2/2
 
-//variables assignment
+//assignment
 def: ID EQUAL expr_list;
-term: factor MULTIPLY factor 
+	  //e.g.  a = 2+2/2
+term: factor
+	  // e.g. 2 
 	| factor DIVIDE factor 
-	| factor
+	  //e.g. a/2
+	| factor MULTIPLY factor 
+	  //e.g. a*2
 	| factor MULTIPLY factor DIVIDE factor
+	  //e.g. a*2/s
 	| factor DIVIDE factor MULTIPLY factor;
+	   //e.g. a/2*s
 factor: ID 
-	  | const_expr 
-	  | LEFTTB expression RIGHTTB 
-	  | prefixop ID 
-	  | ID postfixop 
+	  | const 
+	  | Parentheses_l expression Parentheses_r 
+	  | prefix ID 
+	  | ID postfix 
 	  | method_invocation 
-	  | ID LEFTTMB INT RIGHTTMB;
-prefixop: DOUBLEPLUS 
-		| DOUBLEMINUS 
+	  | ID square_brackets_l INT square_brackets_r;
+prefix: DOUBLEPLUS // ++
+		| DOUBLEMINUS  // --
 		| PLUS 
 		| MINUS;
-postfixop: DOUBLEPLUS 
-		 | DOUBLEMINUS;
-const_expr: INT 
-		  | FLOAT;
-
-//method_invocation 
-method_invocation: name LEFTTB expr_list RIGHTTB 
-				 | name LEFTTB RIGHTTB;
-method_call: method_invocation SEMICOLON;
-
-//conditional
-conditional: IF LEFTTB boolean_expr RIGHTTB simple 
-		   | IF LEFTTB boolean_expr RIGHTTB simple ELSE simple 
-		   | IF LEFTTB boolean_expr RIGHTTB simple ELSE compound 
-		   | IF LEFTTB boolean_expr RIGHTTB simple ELSE conditional;
+postfix: DOUBLEPLUS // ++
+	   | DOUBLEMINUS; // --
+const: INT 
+	 | FLOAT;
 
 //loop
-boolean_expr: expression INFIXOP expression 
-			| boolean_expr AND boolean_expr 
-			| boolean_expr OR boolean_expr
-            | error RIGHTTB;
-loop: WHILE LEFTTB boolean_expr RIGHTTB simple 
-	| WHILE LEFTTB boolean_expr RIGHTTB compound
-	| FOR LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB simple
-    | FOR LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB LEFTBRK compound_list RIGHTBRK
-	| LEFTTB forinitopt SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB compound 
-	| FOR LEFTTB SEMICOLON boolean_expr SEMICOLON forupdateopt RIGHTTB simple;
+bool: expression INFIXOP expression 
+			// a<b
+			| bool AND bool
+			 // a&&b
+			| bool OR bool
+			 // a||b
+            | error Parentheses_r{yyerror;};
+			 // error detect
+loop: WHILE Parentheses_l bool Parentheses_r  simple 
+		// while(a<b) ...
+	| WHILE Parentheses_l bool Parentheses_r compound
+	    // while(a<b) {...}
+	| FOR Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r  simple
+	   // for(int i=0 ; i<2 ; i++) ...
+	| FOR Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r Brackets_l compound_list Brackets_r
+	  // for(int i=0 ; i<2 ; i++) {...}
+	| Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r compound 
+	  // for(int i=0 ; i<2 ; i++) {...}
+	| FOR Parentheses_l SEMICOLON bool SEMICOLON forupdateopt Parentheses_r  simple;
+	 // for( ; i<2 ; i++) {...}
 forinitopt: idlist 
 		  | TYPE idlist;
-forupdateopt: ID LEFTTMB const_expr RIGHTTMB postfixop
-            | ID postfixop 
+forupdateopt: ID square_brackets_l const square_brackets_r postfix
+            | ID postfix 
 			| ID EQUAL expression;
+
+//conditional
+conditional: IF Parentheses_l bool Parentheses_r  simple 
+			// if (a<2) ...
+		   | IF Parentheses_l bool Parentheses_r  simple ELSE  simple 
+		    // if (a<2) ... else ...
+		   | IF Parentheses_l bool Parentheses_r  simple ELSE compound 
+		    // if (a<2) ... else {...}
+		   | IF Parentheses_l bool Parentheses_r  simple ELSE conditional
+		   	// if (a<2) ... else if(...) ...
+		   | IF Parentheses_l bool Parentheses_r Brackets_l ELSE compound Brackets_r ;
+		    // error detect
 
 //return
 return: RETURN expression;
 
-
 %%
 
-
-int main(){
+int main()
+{
 	printf("Line 1 : ");
 	yyparse();
     printf("\n");
 	return 0;
 }
-void yyerror(const char *str){
-	printf( "\n> %s at \"%s\".\n", str, yytext);
-} 
+
+void yyerror(const char *str)
+{
+	printf("\nLine %d, 1st char: %d, %s at \"%s\".\n",lineCount,charCount,str,yytext);
+}

@@ -78,12 +78,12 @@ extern int yydebug;
     COLON = 284,
     COMMA = 285,
     DOT = 286,
-    LEFTTMB = 287,
-    LEFTBRK = 288,
-    RIGHTBRK = 289,
-    RIGHTTMB = 290,
-    LEFTTB = 291,
-    RIGHTTB = 292,
+    square_brackets_l = 287,
+    Brackets_l = 288,
+    Brackets_r = 289,
+    square_brackets_r = 290,
+    Parentheses_l = 291,
+    Parentheses_r = 292,
     EQUAL = 293,
     DOUBLEPLUS = 294,
     DOUBLEMINUS = 295,
@@ -132,12 +132,12 @@ extern int yydebug;
 #define COLON 284
 #define COMMA 285
 #define DOT 286
-#define LEFTTMB 287
-#define LEFTBRK 288
-#define RIGHTBRK 289
-#define RIGHTTMB 290
-#define LEFTTB 291
-#define RIGHTTB 292
+#define square_brackets_l 287
+#define Brackets_l 288
+#define Brackets_r 289
+#define square_brackets_r 290
+#define Parentheses_l 291
+#define Parentheses_r 292
 #define EQUAL 293
 #define DOUBLEPLUS 294
 #define DOUBLEMINUS 295
@@ -159,9 +159,9 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 8 "b073021024.y"
+#line 13 "b073021024.y"
 
-	char *name;
+	char *name; // define type
 
 #line 167 "y.tab.h"
 

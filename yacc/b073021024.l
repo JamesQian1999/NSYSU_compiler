@@ -3,7 +3,7 @@
 #include<stdio.h>
 int newline_comment(char yytext[]);
 char **table = NULL;
-char* id;
+char *id,*t;
 unsigned charCount = 1, idCount = 0, lineCount = 1,top=0;
 void create();
 int lookup(char s[]);
@@ -77,223 +77,271 @@ comment {c_style}|{cpp_style}
  
 {type} {
     printf("%s",yytext);
+    t = (char*)malloc(sizeof(char)*strlen(yytext));
+    strcpy(t,yytext);
+    yylval.name = t;
+    charCount+= yyleng;
     return TYPE;
 }
 
 void {
     printf("%s",yytext);
+    charCount+= yyleng;
     return VOID;
 }
 
 static {
     printf("%s",yytext);
+    charCount+= yyleng;
     return STATIC;
 }
 
 final {
     printf("%s",yytext);
+    charCount+= yyleng;
     return FINAL;
 }
 
 class {
     printf("%s",yytext);
+    charCount+= yyleng;
     return CLASS;
 }
 
 main {
     printf("%s",yytext);
+    charCount+= yyleng;
     return MAIN;
 }
 
 new {
     printf("%s",yytext);
+    charCount+= yyleng;
     return NEW;
 }
 
 public {
     printf("%s",yytext);
+    charCount+= yyleng;
     return PUBLIC;
 }
 
 protected {
     printf("%s",yytext);
+    charCount+= yyleng;
     return PROTECTED;
 }
 
 private {
     printf("%s",yytext);
+    charCount+= yyleng;
     return PRIVATE;
 }
 
 read {
     printf("%s",yytext);
+    charCount+= yyleng;
     return READ;
 }
 
 print {
     printf("%s",yytext);
+    charCount+= yyleng;
     return PRINT;
 }
 
 const {
     printf("%s",yytext);
+    charCount+= yyleng;
     return CONST;
 }
 
 if {
     printf("%s",yytext);
+    charCount+= yyleng;
     return IF;
 }
 
 elseif {
     printf("%s",yytext);
+    charCount+= yyleng;
     return ELSEIF;
 }
 
 case {
     printf("%s",yytext);
+    charCount+= yyleng;
     return CASE;
 }
 
 break {
     printf("%s",yytext);
+    charCount+= yyleng;
     return BREAK;
 }
 
 default {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DEFAULT;
 }
 
 for {
     printf("%s",yytext);
+    charCount+= yyleng;
     return FOR;
 }
 
 do {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DO;
 }
 
 while {
     printf("%s",yytext);
+    charCount+= yyleng;
     return WHILE;
 }
 
 continue {
     printf("%s",yytext);
+    charCount+= yyleng;
     return CONTINUE;
 }
 
 return {
     printf("%s",yytext);
+    charCount+= yyleng;
     return RETURN;
 }
 
 {Semicolon} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return SEMICOLON;
 }
 
 {Colon} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return COLON;
 }
 
 {Comma} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return COMMA;
 }
 
 \. {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DOT;
 }
 
 {square_brackets_l} {
     printf("%s",yytext);
-    return LEFTTMB;
+    charCount+= yyleng;
+    return square_brackets_l;
 }
 {square_brackets_r} {
     printf("%s",yytext);
-    return RIGHTTMB;
+    charCount+= yyleng;
+    return square_brackets_r;
 }
 
 {Brackets_l} {
     printf("%s",yytext);
-    return LEFTBRK;
+    charCount+= yyleng;
+    return Brackets_l;
 }
 {Brackets_r} {
     printf("%s",yytext);
-    return RIGHTBRK;
+    charCount+= yyleng;
+    return Brackets_r;
 }
 
 {Parentheses_l} {
     printf("%s",yytext);
-    return LEFTTB;
+    charCount+= yyleng;
+    return Parentheses_l;
 }
 {Parentheses_r} {
     printf("%s",yytext);
-    return RIGHTTB;
+    charCount+= yyleng;
+    return Parentheses_r;
 }
 
 {assignment} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return EQUAL;
 }
 
 {addadd} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DOUBLEPLUS; 
 }
 
 {subsub} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DOUBLEMINUS;
 }
 
 {add} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return PLUS;
 }
 
 {sub} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return MINUS;
 }
 
 {mul} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return MULTIPLY;
 }
 
 {div} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return DIVIDE;
 }
 
 {and} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return AND;
 }
 
 {or} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return OR;
 }
 
 {integer} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return INT;
 }
 
 {float} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return FLOAT;
 }
 
 {id} {
     printf("%s",yytext);
+    charCount+= yyleng;
     if(table == NULL) create();
     char *id = (char*)malloc(sizeof(char)*strlen(yytext));
     strcpy(id,yytext);
@@ -304,32 +352,35 @@ return {
 
 {invalid_id} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return INVALID;
 }
 
 {string} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return STRING;
 }
 
 {Condition} {
     printf("%s",yytext);
+    charCount+= yyleng;
     return INFIXOP;
 }
 
 {space} {
     printf("%s",yytext);
+    charCount+= yyleng;
 }
 {eol} {
     printf("\nLine %d : ",++lineCount);
+    charCount = 1;
 }
 
 {comment} {
     lineCount += newline_comment(yytext);
 }
 
-. {
-}
 
 %%
 
@@ -389,9 +440,6 @@ void insert(char s[])
     table[top] = (char *)malloc(strlen(s)*sizeof(char *));
     table[top++] = id;
     table = (char **)realloc(table, sizeof(void *)*(top+1));
-    //printf("\n");
-    //dump();
-    //printf("\n");
 }
 
 void dump()

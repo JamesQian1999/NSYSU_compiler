@@ -20,6 +20,7 @@ class test6{
         class Point {
             int x, y, z;
         }
+        
     }
 
 }

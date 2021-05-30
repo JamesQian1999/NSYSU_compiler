@@ -1,4 +1,4 @@
-//-----------1-----------
+//-------------------------------1-------------------------------
 
 /* Test file: Perfect test file
  * Compute sum = 1 + 2 + ... + n
@@ -21,7 +21,7 @@ class sigma {
   }
 }
 
-//-----------2-----------
+//-------------------------------2-------------------------------
 
 /*Test file: Duplicate declare variable in the same scope*/
 class Point
@@ -37,7 +37,7 @@ class Point
     }
 }
 
-//-----------3-----------
+//-------------------------------3-------------------------------
 
 /*Test file of Syntax errer: Out of symbol.  But it can go through*/
 class Point {
@@ -53,7 +53,7 @@ class Test {
     int w,q;
 }
 
-//-----------4-----------
+//-------------------------------4-------------------------------
 
 /*Test file: Duplicate declaration in different scope and same scope*/
 class Point
@@ -79,7 +79,7 @@ class Test
 	Point p = new Point();
 }
 
-//-----------5-----------
+//-------------------------------5-------------------------------
 
 class test5{
     int add(int a1, int a2){
@@ -108,7 +108,7 @@ class test5{
 /* this is a comment // line// with some /* /*and
 // delimiters */
 
------------6-----------
+//-------------------------------6-------------------------------
 
 class test6{
     void sum(){
