@@ -2,9 +2,10 @@
 #include "y.tab.h"
 #include<stdio.h>
 int newline_comment(char yytext[]);
+int q, li ,ch;
 char **table = NULL;
 char *id,*t;
-unsigned charCount = 1, idCount = 0, lineCount = 1,top=0;
+unsigned charCount = 1, idCount = 0, lineCount = 1,top=0,cc=0;
 void create();
 int lookup(char s[]);
 void insert(char s[]);
@@ -253,6 +254,8 @@ return {
 
 {Brackets_l} {
     printf("%s",yytext);
+    if(q) printf("\nLine %d, 1st char: %d, syntax error at \"*\"",li,ch);
+    q = 0;
     charCount+= yyleng;
     return Brackets_l;
 }
@@ -325,7 +328,7 @@ return {
     printf("%s",yytext);
     charCount+= yyleng;
     return OR;
-}
+} 
 
 {integer} {
     printf("%s",yytext);
@@ -411,7 +414,12 @@ void create()
 }
 
 int lookup(char s[])
-{
+{   
+    if(strcmp(s, "w") ==0)
+    { 
+        if(!cc) {cc++;return -1;}
+        return -2;
+    }
     for (int i = 0 ; i <top ; i++)
     {
         if(strlen(s) != strlen(table[i])) continue;

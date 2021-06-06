@@ -70,15 +70,16 @@
 
 
 	#include<stdio.h>
+	#include<string.h>
 	void yyerror(const char*); // handles error
 	int lookup(char s[]); // check symbol table
 	int yylex(); // declare lex
-	int f = -1; // for duplicate identifier
+	int f = -1,q = 0 ,li ,ch; // for duplicate identifier
 	char *yytext; 
 	unsigned charCount, lineCount; // line num and position
 
 
-#line 82 "y.tab.c"
+#line 83 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -236,11 +237,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 13 "b073021024.y"
+#line 14 "b073021024.y"
 
 	char *name; // define type
 
-#line 244 "y.tab.c"
+#line 245 "y.tab.c"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -620,19 +621,19 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    26,    26,    27,    28,    29,    30,    31,    37,    38,
-      39,    40,    41,    42,    43,    45,    48,    49,    50,    51,
-      52,    53,    58,    61,    62,    63,    64,    65,    66,    68,
-      69,    74,    76,    78,    80,    82,    84,    87,    88,    89,
-      90,    92,    94,    98,   100,   102,   104,   106,   111,   113,
-     117,   118,   119,   120,   121,   122,   123,   124,   125,   126,
-     129,   131,   133,   134,   135,   136,   137,   140,   142,   143,
-     144,   145,   146,   147,   149,   150,   153,   154,   155,   156,
-     158,   162,   164,   166,   168,   170,   172,   174,   175,   176,
-     177,   178,   179,   180,   181,   182,   183,   184,   185,   186,
-     187,   188,   191,   193,   195,   197,   199,   201,   203,   205,
-     207,   209,   211,   212,   213,   214,   215,   218,   220,   222,
-     224,   226,   230
+       0,    27,    27,    28,    29,    30,    31,    32,    38,    39,
+      40,    41,    42,    43,    44,    46,    49,    50,    51,    52,
+      53,    54,    59,    62,    63,    64,    65,    66,    67,    69,
+      70,    75,    77,    79,    81,    83,    85,    88,    89,    90,
+      91,    93,    95,    99,   101,   103,   105,   107,   112,   114,
+     118,   119,   120,   121,   122,   123,   124,   125,   126,   127,
+     130,   132,   134,   135,   136,   137,   138,   141,   143,   144,
+     145,   146,   147,   148,   150,   151,   154,   155,   156,   157,
+     159,   163,   165,   167,   169,   171,   173,   175,   176,   177,
+     178,   179,   180,   181,   182,   183,   184,   185,   186,   187,
+     188,   189,   192,   194,   196,   198,   200,   202,   204,   206,
+     208,   210,   212,   213,   214,   215,   216,   219,   221,   223,
+     225,   227,   231
 };
 #endif
 
@@ -1709,38 +1710,38 @@ yyreduce:
   switch (yyn)
     {
   case 7:
-#line 31 "b073021024.y"
+#line 32 "b073021024.y"
                  { // handles duplicate indentifier.
 		int tmp = lookup((yyvsp[0].name));
 		if(f == tmp)
 			printf("\n> \'%s\' is a duplicate indentifier.",(yyvsp[0].name));
 		f = tmp;
 		}
-#line 1720 "y.tab.c"
+#line 1721 "y.tab.c"
     break;
 
   case 14:
-#line 43 "b073021024.y"
+#line 44 "b073021024.y"
                 { //handles SEMICOLON error
 	   printf("\nLine %d, 1st char: %d, a syntax error at \"%s\"",lineCount,charCount-5,(yyvsp[0].name));}
-#line 1727 "y.tab.c"
+#line 1728 "y.tab.c"
     break;
 
   case 21:
-#line 54 "b073021024.y"
+#line 55 "b073021024.y"
                   {	  // handles comma error
 			  printf("\nLine %d, 1st char: %d, a syntax error at \"%s\"",lineCount,charCount-2,(yyvsp[-1].name));}
-#line 1734 "y.tab.c"
+#line 1735 "y.tab.c"
     break;
 
   case 105:
-#line 197 "b073021024.y"
+#line 198 "b073021024.y"
                               {yyerror;}
-#line 1740 "y.tab.c"
+#line 1741 "y.tab.c"
     break;
 
 
-#line 1744 "y.tab.c"
+#line 1745 "y.tab.c"
 
       default: break;
     }
@@ -1972,7 +1973,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 232 "b073021024.y"
+#line 233 "b073021024.y"
 
 
 int main()
@@ -1985,5 +1986,8 @@ int main()
 
 void yyerror(const char *str)
 {
-	printf("\nLine %d, 1st char: %d, %s at \"%s\".\n",lineCount,charCount,str,yytext);
+	if(strcmp(yytext, "*"))
+		printf("\nLine %d, 1st char: %d, %s at \"%s\"",lineCount,charCount,str,yytext);
+	else
+		{q = 1;li = lineCount; ch = charCount;}
 }
