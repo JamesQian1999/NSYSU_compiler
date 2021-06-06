@@ -1,11 +1,10 @@
 %{
 
 	#include<stdio.h>
-	#include<string.h>
 	void yyerror(const char*); // handles error
 	int lookup(char s[]); // check symbol table
 	int yylex(); // declare lex
-	int f = -1,q = 0 ,li ,ch; // for duplicate identifier
+	int f = -1; // for duplicate identifier
 	char *yytext; 
 	unsigned charCount, lineCount; // line num and position
 
@@ -13,7 +12,7 @@
 
 %union{
 	char *name; // define type
-} 
+}
 
 //define token and type
 %token <name> TYPE VOID STATIC FINAL CLASS MAIN NEW PUBLIC PROTECTED PRIVATE READ PRINT CONST IF ELSEIF ELSE SWITCH CASE BREAK DEFAULT FOR DO WHILE CONTINUE RETURN SEMICOLON COLON COMMA DOT square_brackets_l Brackets_l Brackets_r square_brackets_r Parentheses_l Parentheses_r EQUAL DOUBLEPLUS DOUBLEMINUS PLUS MINUS MULTIPLY DIVIDE INFIXOP SYMBOL AND OR INT FLOAT INVALID ID STRING 
@@ -146,7 +145,7 @@ compound_list: dec_list SEMICOLON
 	  | name DOUBLEPLUS 
 	  | name DOUBLEMINUS 
 	  | PRINT Parentheses_l STRING factor Parentheses_r;
-	  	// e.g. print("aa"+a)
+	  	// e.g. print("aa%s",a)
 name: ID 
 	| ID DOT ID;
 
@@ -202,13 +201,13 @@ loop: WHILE Parentheses_l bool Parentheses_r  simple
 	| WHILE Parentheses_l bool Parentheses_r compound
 	    // while(a<b) {...}
 	| FOR Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r  simple
-	    // for(int i=0 ; i<2 ; i++) ...
+	   // for(int i=0 ; i<2 ; i++) ...
 	| FOR Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r Brackets_l compound_list Brackets_r
-	    // for(int i=0 ; i<2 ; i++) {...}
+	  // for(int i=0 ; i<2 ; i++) {...}
 	| Parentheses_l forinitopt SEMICOLON bool SEMICOLON forupdateopt Parentheses_r compound 
-	    // for(int i=0 ; i<2 ; i++) {...}
+	  // for(int i=0 ; i<2 ; i++) {...}
 	| FOR Parentheses_l SEMICOLON bool SEMICOLON forupdateopt Parentheses_r  simple;
-	    // for( ; i<2 ; i++) {...}
+	 // for( ; i<2 ; i++) {...}
 forinitopt: idlist 
 		  | TYPE idlist;
 forupdateopt: ID square_brackets_l const square_brackets_r postfix
@@ -242,8 +241,5 @@ int main()
 
 void yyerror(const char *str)
 {
-	if(strcmp(yytext, "*"))
-		printf("\nLine %d, 1st char: %d, %s at \"%s\"",lineCount,charCount,str,yytext);
-	else
-		{q = 1;li = lineCount; ch = charCount;}
+	printf("\nLine %d, 1st char: %d, %s at \"%s\".\n",lineCount,charCount,str,yytext);
 }

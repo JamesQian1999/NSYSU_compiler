@@ -577,15 +577,14 @@ char *yytext;
 #include "y.tab.h"
 #include<stdio.h>
 int newline_comment(char yytext[]);
-int q, li ,ch;
 char **table = NULL;
 char *id,*t;
-unsigned charCount = 1, idCount = 0, lineCount = 1,top=0,cc=0;
+unsigned charCount = 1, idCount = 0, lineCount = 1,top=0;
 void create();
 int lookup(char s[]);
 void insert(char s[]);
 void dump();
-#line 589 "lex.yy.c"
+#line 588 "lex.yy.c"
 /* type */
 /* symbols */
 /* Arithmetic, Relational, and Logical Operators */
@@ -595,7 +594,7 @@ void dump();
 /* String Constants */
 /* Whitespace */
 /* Comments */
-#line 599 "lex.yy.c"
+#line 598 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -812,11 +811,11 @@ YY_DECL
 		}
 
 	{
-#line 77 "b073021024.l"
+#line 76 "b073021024.l"
 
-#line 79 "b073021024.l"
+#line 78 "b073021024.l"
  
-#line 820 "lex.yy.c"
+#line 819 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -875,7 +874,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 80 "b073021024.l"
+#line 79 "b073021024.l"
 {
     printf("%s",yytext);
     t = (char*)malloc(sizeof(char)*strlen(yytext));
@@ -887,7 +886,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 89 "b073021024.l"
+#line 88 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -896,7 +895,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 95 "b073021024.l"
+#line 94 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -905,7 +904,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 101 "b073021024.l"
+#line 100 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -914,7 +913,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 107 "b073021024.l"
+#line 106 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -923,7 +922,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 113 "b073021024.l"
+#line 112 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -932,7 +931,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 119 "b073021024.l"
+#line 118 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -941,7 +940,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 125 "b073021024.l"
+#line 124 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -950,7 +949,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 131 "b073021024.l"
+#line 130 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -959,7 +958,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 137 "b073021024.l"
+#line 136 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -968,7 +967,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 143 "b073021024.l"
+#line 142 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -977,7 +976,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 149 "b073021024.l"
+#line 148 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -986,7 +985,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 155 "b073021024.l"
+#line 154 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -995,7 +994,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 161 "b073021024.l"
+#line 160 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1004,7 +1003,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 167 "b073021024.l"
+#line 166 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1013,7 +1012,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 173 "b073021024.l"
+#line 172 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1022,7 +1021,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 179 "b073021024.l"
+#line 178 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1031,7 +1030,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 185 "b073021024.l"
+#line 184 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1040,7 +1039,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 191 "b073021024.l"
+#line 190 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1049,7 +1048,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 197 "b073021024.l"
+#line 196 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1058,7 +1057,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 203 "b073021024.l"
+#line 202 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1067,7 +1066,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 209 "b073021024.l"
+#line 208 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1076,7 +1075,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 215 "b073021024.l"
+#line 214 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1085,7 +1084,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 221 "b073021024.l"
+#line 220 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1094,7 +1093,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 227 "b073021024.l"
+#line 226 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1103,7 +1102,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 233 "b073021024.l"
+#line 232 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1112,7 +1111,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 239 "b073021024.l"
+#line 238 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1121,7 +1120,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 245 "b073021024.l"
+#line 244 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1130,7 +1129,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 250 "b073021024.l"
+#line 249 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1139,18 +1138,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 256 "b073021024.l"
+#line 255 "b073021024.l"
 {
     printf("%s",yytext);
-    if(q) printf("\nLine %d, 1st char: %d, syntax error at \"*\"",li,ch);
-    q = 0;
     charCount+= yyleng;
     return Brackets_l;
 }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 263 "b073021024.l"
+#line 260 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1159,7 +1156,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 269 "b073021024.l"
+#line 266 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1168,7 +1165,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 274 "b073021024.l"
+#line 271 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1177,7 +1174,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 280 "b073021024.l"
+#line 277 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1186,7 +1183,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 286 "b073021024.l"
+#line 283 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1195,7 +1192,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 292 "b073021024.l"
+#line 289 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1204,7 +1201,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 298 "b073021024.l"
+#line 295 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1213,7 +1210,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 304 "b073021024.l"
+#line 301 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1222,7 +1219,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 310 "b073021024.l"
+#line 307 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1231,7 +1228,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 316 "b073021024.l"
+#line 313 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1240,7 +1237,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 322 "b073021024.l"
+#line 319 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1249,16 +1246,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 328 "b073021024.l"
+#line 325 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
     return OR;
-} 
+}
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 334 "b073021024.l"
+#line 331 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1267,7 +1264,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 340 "b073021024.l"
+#line 337 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1276,7 +1273,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 346 "b073021024.l"
+#line 343 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1290,7 +1287,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 357 "b073021024.l"
+#line 354 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1300,7 +1297,7 @@ YY_RULE_SETUP
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 363 "b073021024.l"
+#line 360 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1309,7 +1306,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 369 "b073021024.l"
+#line 366 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1318,7 +1315,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 375 "b073021024.l"
+#line 372 "b073021024.l"
 {
     printf("%s",yytext);
     charCount+= yyleng;
@@ -1327,7 +1324,7 @@ YY_RULE_SETUP
 case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
-#line 379 "b073021024.l"
+#line 376 "b073021024.l"
 {
     printf("\nLine %d : ",++lineCount);
     charCount = 1;
@@ -1336,17 +1333,17 @@ YY_RULE_SETUP
 case 51:
 /* rule 51 can match eol */
 YY_RULE_SETUP
-#line 384 "b073021024.l"
+#line 381 "b073021024.l"
 {
     lineCount += newline_comment(yytext);
 }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 389 "b073021024.l"
+#line 386 "b073021024.l"
 ECHO;
 	YY_BREAK
-#line 1350 "lex.yy.c"
+#line 1347 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2351,7 +2348,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 389 "b073021024.l"
+#line 386 "b073021024.l"
 
 
 int yywrap(){
@@ -2381,12 +2378,7 @@ void create()
 }
 
 int lookup(char s[])
-{   
-    if(strcmp(s, "w") ==0)
-    { 
-        if(!cc) {cc++;return -1;}
-        return -2;
-    }
+{
     for (int i = 0 ; i <top ; i++)
     {
         if(strlen(s) != strlen(table[i])) continue;

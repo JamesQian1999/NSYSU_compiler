@@ -1,25 +1,9 @@
-class Test {
-    int d;
-    Point p = new Point()
-    /*Need ';' at EOL*/
-    int w,q;
-}
-class Point {
-    int z;
-    int x y ;
-    /*Need  ',' before y*/
-    float w;
-}
-class Point
-{
-    static int counter ;
-    int x, y ;
-    /*Duplicate declare x*/
-    int x ;
-    void clear()
-    {
-        x = 0 ;
-        y = 0 ;
+class test5{
+    int add(int a1, int a2){
+        return (a1 + a2);
+    }
+    void main() {
+        int x, y, z;
         for(int i=0;i<2;i++){
             if(i==0){
 //--------------ELSE WITHOUT IF
@@ -33,5 +17,10 @@ class Point
                 x = z(x,y);
             }
         }
+        print("x:"+x+"y:"+y);
+        z = ( x + y ) * 5 / 2 -- -y;
     }
 }
+
+/* this is a comment // line// with some /* /*and
+// delimiters */
