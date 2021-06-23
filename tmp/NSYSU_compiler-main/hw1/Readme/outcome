@@ -1,0 +1,156 @@
+rm -rf lib/build lex.o my_lex.elf lex.c
+flex -o lex.c B073040047.l
+gcc -c lex.c
+g++ lex.o lib/libsymbol_table.a -lfl -o my_lex.elf
+./my_lex.elf < TestFile_Lab1_2021/Test1.java
+Line: 2, 1st char: 1, "public" is a "reserved word".
+Line: 2, 1st char: 8, "class" is a "reserved word".
+Line: 2, 1st char: 14, "Test1" is a "ID".
+Line: 2, 1st char: 20, "{" is a "symbol".
+Line: 3, 1st char: 5, "public" is a "reserved word".
+Line: 3, 1st char: 12, "static" is a "reserved word".
+Line: 3, 1st char: 19, "int" is a "reserved word".
+Line: 3, 1st char: 23, "add" is a "ID".
+Line: 3, 1st char: 26, "(" is a "symbol".
+Line: 3, 1st char: 27, "int" is a "reserved word".
+Line: 3, 1st char: 31, "a" is a "ID".
+Line: 3, 1st char: 32, "," is a "symbol".
+Line: 3, 1st char: 34, "int" is a "reserved word".
+Line: 3, 1st char: 38, "b" is a "ID".
+Line: 3, 1st char: 39, ")" is a "symbol".
+Line: 3, 1st char: 41, "{" is a "symbol".
+Line: 4, 1st char: 9, "return" is a "reserved word".
+Line: 4, 1st char: 16, "a" is a "ID".
+Line: 4, 1st char: 18, "+" is a "operator".
+Line: 4, 1st char: 20, "b" is a "ID".
+Line: 4, 1st char: 21, ";" is a "symbol".
+Line: 5, 1st char: 5, "}" is a "symbol".
+Line: 7, 1st char: 5, "public" is a "reserved word".
+Line: 7, 1st char: 12, "static" is a "reserved word".
+Line: 7, 1st char: 19, "void" is a "reserved word".
+Line: 7, 1st char: 24, "main" is a "reserved word".
+Line: 7, 1st char: 28, "(" is a "symbol".
+Line: 7, 1st char: 29, ")" is a "symbol".
+Line: 7, 1st char: 31, "{" is a "symbol".
+Line: 9, 1st char: 9, "int" is a "reserved word".
+Line: 9, 1st char: 13, "c" is a "ID".
+Line: 9, 1st char: 14, ";" is a "symbol".
+Line: 10, 1st char: 9, "int" is a "reserved word".
+Line: 10, 1st char: 13, "a" is a "ID".
+Line: 10, 1st char: 15, "=" is a "operator".
+Line: 10, 1st char: 17, "5" is a "integer".
+Line: 10, 1st char: 18, ";" is a "symbol".
+Line: 11, 1st char: 9, "c" is a "ID".
+Line: 11, 1st char: 11, "=" is a "operator".
+Line: 11, 1st char: 13, "add" is a "ID".
+Line: 11, 1st char: 16, "(" is a "symbol".
+Line: 11, 1st char: 17, "a" is a "ID".
+Line: 11, 1st char: 18, "," is a "symbol".
+Line: 11, 1st char: 20, "10" is a "integer".
+Line: 11, 1st char: 22, ")" is a "symbol".
+Line: 11, 1st char: 23, ";" is a "symbol".
+Line: 12, 1st char: 9, "if" is a "reserved word".
+Line: 12, 1st char: 12, "(" is a "symbol".
+Line: 12, 1st char: 13, "c" is a "ID".
+Line: 12, 1st char: 15, ">" is a "operator".
+Line: 12, 1st char: 17, "10" is a "integer".
+Line: 12, 1st char: 19, ")" is a "symbol".
+Line: 13, 1st char: 13, "print" is a "reserved word".
+Line: 13, 1st char: 18, "(" is a "symbol".
+Line: 13, 1st char: 19, ""c = "" is a "string".
+Line: 13, 1st char: 26, "+" is a "operator".
+Line: 13, 1st char: 28, "-" is a "operator".
+Line: 13, 1st char: 29, "c" is a "ID".
+Line: 13, 1st char: 30, ")" is a "symbol".
+Line: 13, 1st char: 31, ";" is a "symbol".
+Line: 14, 1st char: 9, "else" is a "reserved word".
+Line: 15, 1st char: 13, "print" is a "reserved word".
+Line: 15, 1st char: 18, "(" is a "symbol".
+Line: 15, 1st char: 19, "c" is a "ID".
+Line: 15, 1st char: 20, ")" is a "symbol".
+Line: 15, 1st char: 21, ";" is a "symbol".
+Line: 16, 1st char: 9, "print" is a "reserved word".
+Line: 16, 1st char: 14, "(" is a "symbol".
+Line: 16, 1st char: 15, ""Hello World"" is a "string".
+Line: 16, 1st char: 28, ")" is a "symbol".
+Line: 16, 1st char: 29, ";" is a "symbol".
+Line: 18, 1st char: 5, "}" is a "symbol".
+Line: 20, 1st char: 1, "}" is a "symbol".
+The symbol table contains:
+b
+a
+c
+add
+Test1
+./my_lex.elf < TestFile_Lab1_2021/Test2.java
+Line: 1, 1st char: 1, "// this is a comment // line */ /* with /* delimiters */ before the end
+" is a "comment".
+Line: 3, 1st char: 1, "public" is a "reserved word".
+Line: 3, 1st char: 8, "class" is a "reserved word".
+Line: 3, 1st char: 14, "Test2" is a "ID".
+Line: 3, 1st char: 20, "{" is a "symbol".
+Line: 4, 1st char: 5, "int" is a "reserved word".
+Line: 4, 1st char: 9, "i" is a "ID".
+Line: 4, 1st char: 11, "=" is a "operator".
+Line: 4, 1st char: 13, "-100" is a "integer".
+Line: 4, 1st char: 17, ";" is a "symbol".
+Line: 5, 1st char: 5, "double" is a "reserved word".
+Line: 5, 1st char: 12, "d" is a "ID".
+Line: 5, 1st char: 14, "=" is a "operator".
+Line: 5, 1st char: 16, "12.25e+6" is a "float".
+Line: 5, 1st char: 24, ";" is a "symbol".
+Line: 7, 1st char: 5, "public" is a "reserved word".
+Line: 7, 1st char: 12, "static" is a "reserved word".
+Line: 7, 1st char: 19, "void" is a "reserved word".
+Line: 7, 1st char: 24, "main" is a "reserved word".
+Line: 7, 1st char: 28, "(" is a "symbol".
+Line: 7, 1st char: 29, ")" is a "symbol".
+Line: 7, 1st char: 31, "{" is a "symbol".
+Line: 8, 1st char: 1, "/* this is a comment // line with some /* and
+// delimiters */" is a "comment".
+Line: 10, 1st char: 5, "}" is a "symbol".
+Line: 11, 1st char: 1, "}" is a "symbol".
+The symbol table contains:
+d
+i
+Test2
+./my_lex.elf < TestFile_Lab1_2021/Test3.java
+Line: 2, 1st char: 1, "public" is a "reserved word".
+Line: 2, 1st char: 8, "class" is a "reserved word".
+Line: 2, 1st char: 14, "Test3" is a "ID".
+Line: 2, 1st char: 20, "{" is a "symbol".
+Line: 3, 1st char: 5, "int" is a "reserved word".
+Line: 3, 1st char: 9, "A" is a "ID".
+Line: 3, 1st char: 10, ";" is a "symbol".
+Line: 4, 1st char: 5, "int" is a "reserved word".
+Line: 4, 1st char: 9, "a" is a "ID".
+Line: 5, 1st char: 5, "double" is a "reserved word".
+Line: 5, 1st char: 12, "b" is a "ID".
+Line: 5, 1st char: 13, ";" is a "symbol".
+Line: 6, 1st char: 5, "double" is a "reserved word".
+Line: 6, 1st char: 12, "A" is a "ID".
+Line: 6, 1st char: 13, ";" is a "symbol".
+Line: 8, 1st char: 5, "public" is a "reserved word".
+Line: 8, 1st char: 12, "Test3" is a "ID".
+Line: 8, 1st char: 17, "(" is a "symbol".
+Line: 8, 1st char: 18, ")" is a "symbol".
+Line: 8, 1st char: 20, "{" is a "symbol".
+Line: 9, 1st char: 9, "a" is a "ID".
+Line: 9, 1st char: 11, "=" is a "operator".
+Line: 9, 1st char: 13, "1" is a "integer".
+Line: 9, 1st char: 14, ";" is a "symbol".
+Line: 10, 1st char: 9, "A" is a "ID".
+Line: 10, 1st char: 11, "=" is a "operator".
+Line: 10, 1st char: 13, "2" is a "integer".
+Line: 10, 1st char: 14, ";" is a "symbol".
+Line: 11, 1st char: 9, "b" is a "ID".
+Line: 11, 1st char: 11, "=" is a "operator".
+Line: 11, 1st char: 13, "-1.2" is a "float".
+Line: 11, 1st char: 17, ";" is a "symbol".
+Line: 12, 1st char: 5, "}" is a "symbol".
+Line: 13, 1st char: 1, "}" is a "symbol".
+The symbol table contains:
+b
+a
+A
+Test3

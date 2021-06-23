@@ -1,0 +1,2769 @@
+State 54 conflicts: 2 shift/reduce
+State 57 conflicts: 1 shift/reduce
+State 95 conflicts: 15 shift/reduce
+State 105 conflicts: 2 shift/reduce
+State 118 conflicts: 18 shift/reduce
+State 119 conflicts: 2 shift/reduce
+State 133 conflicts: 11 shift/reduce
+State 135 conflicts: 4 shift/reduce
+State 136 conflicts: 4 shift/reduce
+State 138 conflicts: 2 shift/reduce
+
+
+Grammar
+
+    0 $accept: classes $end
+
+    1 classes: %empty
+    2        | classes class
+
+    3 $@1: %empty
+
+    4 class: CLASS ID '{' $@1 declare '}'
+
+    5 declare: %empty
+    6        | declare final_decl__ ';'
+    7        | declare spec_decl__
+    8        | declare MAIN '(' args ')' compound
+    9        | declare VOID MAIN '(' args ')' compound
+   10        | declare class
+   11        | declare error ';'
+
+   12 $@2: %empty
+
+   13 compound: '{' $@2 statement_star '}'
+
+   14 spec_decl__: spec_type_chk__ decl_impl ';'
+   15            | spec_type_chk__ '(' args ')' compound
+
+   16 spec_type_chk__: spec_type__ generic_id
+
+   17 decl_impl: %empty
+   18          | '=' init_decl
+   19          | ',' id_list
+
+   20 init_decl: const_expr
+   21          | NEW type arr_or_obj
+
+   22 arr_or_obj: '[' INT_L ']'
+   23           | '(' tuple ')'
+
+   24 final_decl__: final_decl_chk__ const_expr
+   25             | final_decl_chk__ NEW type arr_or_obj
+
+   26 $@3: %empty
+
+   27 final_decl_chk__: FINAL type generic_id $@3 '='
+
+   28 spec_type__: STATIC type
+   29            | type
+
+   30 args: %empty
+   31     | type generic_id
+   32     | args ',' type generic_id
+
+   33 id_list: init_or_not__
+   34        | id_list ',' init_or_not__
+
+   35 init_or_not__: generic_id
+   36              | id_list_init
+
+   37 id_list_init: generic_id '=' const_expr
+   38             | id_list_init ',' generic_id '=' const_expr
+
+   39 tuple: %empty
+   40      | tuple INT_L
+   41      | tuple FLOAT_L
+   42      | tuple STR
+
+   43 generic_id: ID
+   44           | generic_id '[' INT_L ']'
+   45           | generic_id '.' ID
+
+   46 type: type '[' ']'
+   47     | INT
+   48     | FLOAT
+   49     | CHAR
+   50     | BOOLEAN
+   51     | VOID
+   52     | ID
+
+   53 const_expr: INT_L
+   54           | FLOAT_L
+   55           | STR
+   56           | generic_id
+   57           | const_expr Infixop const_expr
+
+   58 Infixop: '+'
+   59        | '-'
+   60        | '*'
+   61        | '/'
+   62        | '%'
+   63        | '>'
+   64        | '<'
+   65        | '&'
+   66        | '|'
+   67        | LE
+   68        | GE
+   69        | EQ
+   70        | NE
+   71        | AND
+   72        | OR
+
+   73 statement_star: %empty
+   74               | statement_star compound
+   75               | statement_star simple_call_decl ';'
+   76               | statement_star conditional
+   77               | statement_star loop
+   78               | statement_star return
+   79               | statement_star declare
+   80               | statement_star ';'
+
+   81 simple_call_decl: generic_id '(' para_list ')'
+   82                 | generic_id '=' simple_call_decl
+   83                 | generic_id PP
+   84                 | generic_id MM
+   85                 | PP generic_id
+   86                 | MM generic_id
+   87                 | '+' generic_id
+   88                 | '-' generic_id
+   89                 | expr
+   90                 | PRINT '(' expr ')'
+   91                 | generic_id generic_id decl_impl
+
+   92 expr: term
+   93     | expr '+' term
+   94     | expr '-' term
+   95     | error
+
+   96 term: factor
+   97     | term '*' factor
+   98     | term '/' factor
+
+   99 factor: const_expr
+  100       | '(' expr ')'
+
+  101 conditional: if_simple__
+  102            | if_simple__ else_simple__
+  103            | if_simple__ else_compound__
+  104            | if_compound__
+  105            | if_compound__ else_simple__
+  106            | if_compound__ else_compound__
+
+  107 if_expr__: IF '(' bool_expr ')'
+
+  108 if_simple__: if_expr__ simple_call_decl
+
+  109 if_compound__: if_expr__ compound
+
+  110 else_simple__: ELSE simple_call_decl
+
+  111 else_compound__: ELSE compound
+
+  112 bool_expr: expr
+
+  113 loop: while_expr__ simple_call_decl
+  114     | while_expr__ compound
+  115     | for_expr__ simple_call_decl
+  116     | for_expr__ compound
+
+  117 while_expr__: WHILE '(' bool_expr ')'
+
+  118 for_expr__: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')'
+
+  119 ForInitOpt: %empty
+  120           | id_list_init
+  121           | INT id_list_init
+
+  122 ForUpdateOpt: %empty
+  123             | generic_id PP
+  124             | generic_id MM
+
+  125 return: RETURN expr ';'
+
+  126 para_list: expr
+  127          | para_list ',' expr
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '%' (37) 62
+    '&' (38) 65
+    '(' (40) 8 9 15 23 81 90 100 107 117 118
+    ')' (41) 8 9 15 23 81 90 100 107 117 118
+    '*' (42) 60 97
+    '+' (43) 58 87 93
+    ',' (44) 19 32 34 38 127
+    '-' (45) 59 88 94
+    '.' (46) 45
+    '/' (47) 61 98
+    ';' (59) 6 11 14 75 80 118 125
+    '<' (60) 64
+    '=' (61) 18 27 37 38 82
+    '>' (62) 63
+    '[' (91) 22 44 46
+    ']' (93) 22 44 46
+    '{' (123) 4 13
+    '|' (124) 66
+    '}' (125) 4 13
+    error (256) 11 95
+    ELSE (258) 110 111
+    AND (259) 71
+    BOOLEAN (260) 50
+    CHAR (261) 49
+    CLASS (262) 4
+    EQ (263) 69
+    FINAL (264) 27
+    FLOAT (265) 48
+    FOR (266) 118
+    GE (267) 68
+    ID (268) 4 43 45 52
+    IF (269) 107
+    INT (270) 47 121
+    LE (271) 67
+    MAIN (272) 8 9
+    MM (273) 84 86 124
+    NE (274) 70
+    NEW (275) 21 25
+    INT_L (276) 22 40 44 53
+    FLOAT_L (277) 41 54
+    OR (278) 72
+    PP (279) 83 85 123
+    PRINT (280) 90
+    RETURN (281) 125
+    STATIC (282) 28
+    STR (283) 42 55
+    VOID (284) 9 51
+    WHILE (285) 117
+
+
+Nonterminals, with rules where they appear
+
+    $accept (50)
+        on left: 0
+    classes (51)
+        on left: 1 2
+        on right: 0 2
+    class (52)
+        on left: 4
+        on right: 2 10
+    $@1 (53)
+        on left: 3
+        on right: 4
+    declare (54)
+        on left: 5 6 7 8 9 10 11
+        on right: 4 6 7 8 9 10 11 79
+    compound (55)
+        on left: 13
+        on right: 8 9 15 74 109 111 114 116
+    $@2 (56)
+        on left: 12
+        on right: 13
+    spec_decl__ (57)
+        on left: 14 15
+        on right: 7
+    spec_type_chk__ (58)
+        on left: 16
+        on right: 14 15
+    decl_impl (59)
+        on left: 17 18 19
+        on right: 14 91
+    init_decl (60)
+        on left: 20 21
+        on right: 18
+    arr_or_obj (61)
+        on left: 22 23
+        on right: 21 25
+    final_decl__ (62)
+        on left: 24 25
+        on right: 6
+    final_decl_chk__ (63)
+        on left: 27
+        on right: 24 25
+    $@3 (64)
+        on left: 26
+        on right: 27
+    spec_type__ (65)
+        on left: 28 29
+        on right: 16
+    args (66)
+        on left: 30 31 32
+        on right: 8 9 15 32
+    id_list (67)
+        on left: 33 34
+        on right: 19 34
+    init_or_not__ (68)
+        on left: 35 36
+        on right: 33 34
+    id_list_init (69)
+        on left: 37 38
+        on right: 36 38 120 121
+    tuple (70)
+        on left: 39 40 41 42
+        on right: 23 40 41 42
+    generic_id (71)
+        on left: 43 44 45
+        on right: 16 27 31 32 35 37 38 44 45 56 81 82 83 84 85 86 87 88 91 123 124
+    type (72)
+        on left: 46 47 48 49 50 51 52
+        on right: 21 25 27 28 29 31 32 46
+    const_expr (73)
+        on left: 53 54 55 56 57
+        on right: 20 24 37 38 57 99
+    Infixop (74)
+        on left: 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72
+        on right: 57
+    statement_star (75)
+        on left: 73 74 75 76 77 78 79 80
+        on right: 13 74 75 76 77 78 79 80
+    simple_call_decl (76)
+        on left: 81 82 83 84 85 86 87 88 89 90 91
+        on right: 75 82 108 110 113 115
+    expr (77)
+        on left: 92 93 94 95
+        on right: 89 90 93 94 100 112 125 126 127
+    term (78)
+        on left: 96 97 98
+        on right: 92 93 94 97 98
+    factor (79)
+        on left: 99 100
+        on right: 96 97 98
+    conditional (80)
+        on left: 101 102 103 104 105 106
+        on right: 76
+    if_expr__ (81)
+        on left: 107
+        on right: 108 109
+    if_simple__ (82)
+        on left: 108
+        on right: 101 102 103
+    if_compound__ (83)
+        on left: 109
+        on right: 104 105 106
+    else_simple__ (84)
+        on left: 110
+        on right: 102 105
+    else_compound__ (85)
+        on left: 111
+        on right: 103 106
+    bool_expr (86)
+        on left: 112
+        on right: 107 117 118
+    loop (87)
+        on left: 113 114 115 116
+        on right: 77
+    while_expr__ (88)
+        on left: 117
+        on right: 113 114
+    for_expr__ (89)
+        on left: 118
+        on right: 115 116
+    ForInitOpt (90)
+        on left: 119 120 121
+        on right: 118
+    ForUpdateOpt (91)
+        on left: 122 123 124
+        on right: 118
+    return (92)
+        on left: 125
+        on right: 78
+    para_list (93)
+        on left: 126 127
+        on right: 81 127
+
+
+State 0
+
+    0 $accept: . classes $end
+
+    $default  reduce using rule 1 (classes)
+
+    classes  go to state 1
+
+
+State 1
+
+    0 $accept: classes . $end
+    2 classes: classes . class
+
+    $end   shift, and go to state 2
+    CLASS  shift, and go to state 3
+
+    class  go to state 4
+
+
+State 2
+
+    0 $accept: classes $end .
+
+    $default  accept
+
+
+State 3
+
+    4 class: CLASS . ID '{' $@1 declare '}'
+
+    ID  shift, and go to state 5
+
+
+State 4
+
+    2 classes: classes class .
+
+    $default  reduce using rule 2 (classes)
+
+
+State 5
+
+    4 class: CLASS ID . '{' $@1 declare '}'
+
+    '{'  shift, and go to state 6
+
+
+State 6
+
+    4 class: CLASS ID '{' . $@1 declare '}'
+
+    $default  reduce using rule 3 ($@1)
+
+    $@1  go to state 7
+
+
+State 7
+
+    4 class: CLASS ID '{' $@1 . declare '}'
+
+    $default  reduce using rule 5 (declare)
+
+    declare  go to state 8
+
+
+State 8
+
+    4 class: CLASS ID '{' $@1 declare . '}'
+    6 declare: declare . final_decl__ ';'
+    7        | declare . spec_decl__
+    8        | declare . MAIN '(' args ')' compound
+    9        | declare . VOID MAIN '(' args ')' compound
+   10        | declare . class
+   11        | declare . error ';'
+
+    error    shift, and go to state 9
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    CLASS    shift, and go to state 3
+    FINAL    shift, and go to state 12
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    MAIN     shift, and go to state 16
+    STATIC   shift, and go to state 17
+    VOID     shift, and go to state 18
+    '}'      shift, and go to state 19
+
+    class             go to state 20
+    spec_decl__       go to state 21
+    spec_type_chk__   go to state 22
+    final_decl__      go to state 23
+    final_decl_chk__  go to state 24
+    spec_type__       go to state 25
+    type              go to state 26
+
+
+State 9
+
+   11 declare: declare error . ';'
+
+    ';'  shift, and go to state 27
+
+
+State 10
+
+   50 type: BOOLEAN .
+
+    $default  reduce using rule 50 (type)
+
+
+State 11
+
+   49 type: CHAR .
+
+    $default  reduce using rule 49 (type)
+
+
+State 12
+
+   27 final_decl_chk__: FINAL . type generic_id $@3 '='
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    type  go to state 29
+
+
+State 13
+
+   48 type: FLOAT .
+
+    $default  reduce using rule 48 (type)
+
+
+State 14
+
+   52 type: ID .
+
+    $default  reduce using rule 52 (type)
+
+
+State 15
+
+   47 type: INT .
+
+    $default  reduce using rule 47 (type)
+
+
+State 16
+
+    8 declare: declare MAIN . '(' args ')' compound
+
+    '('  shift, and go to state 30
+
+
+State 17
+
+   28 spec_type__: STATIC . type
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    type  go to state 31
+
+
+State 18
+
+    9 declare: declare VOID . MAIN '(' args ')' compound
+   51 type: VOID .
+
+    MAIN  shift, and go to state 32
+
+    $default  reduce using rule 51 (type)
+
+
+State 19
+
+    4 class: CLASS ID '{' $@1 declare '}' .
+
+    $default  reduce using rule 4 (class)
+
+
+State 20
+
+   10 declare: declare class .
+
+    $default  reduce using rule 10 (declare)
+
+
+State 21
+
+    7 declare: declare spec_decl__ .
+
+    $default  reduce using rule 7 (declare)
+
+
+State 22
+
+   14 spec_decl__: spec_type_chk__ . decl_impl ';'
+   15            | spec_type_chk__ . '(' args ')' compound
+
+    '('  shift, and go to state 33
+    '='  shift, and go to state 34
+    ','  shift, and go to state 35
+
+    $default  reduce using rule 17 (decl_impl)
+
+    decl_impl  go to state 36
+
+
+State 23
+
+    6 declare: declare final_decl__ . ';'
+
+    ';'  shift, and go to state 37
+
+
+State 24
+
+   24 final_decl__: final_decl_chk__ . const_expr
+   25             | final_decl_chk__ . NEW type arr_or_obj
+
+    ID       shift, and go to state 38
+    NEW      shift, and go to state 39
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+
+    generic_id  go to state 43
+    const_expr  go to state 44
+
+
+State 25
+
+   16 spec_type_chk__: spec_type__ . generic_id
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 45
+
+
+State 26
+
+   29 spec_type__: type .
+   46 type: type . '[' ']'
+
+    '['  shift, and go to state 46
+
+    $default  reduce using rule 29 (spec_type__)
+
+
+State 27
+
+   11 declare: declare error ';' .
+
+    $default  reduce using rule 11 (declare)
+
+
+State 28
+
+   51 type: VOID .
+
+    $default  reduce using rule 51 (type)
+
+
+State 29
+
+   27 final_decl_chk__: FINAL type . generic_id $@3 '='
+   46 type: type . '[' ']'
+
+    ID   shift, and go to state 38
+    '['  shift, and go to state 46
+
+    generic_id  go to state 47
+
+
+State 30
+
+    8 declare: declare MAIN '(' . args ')' compound
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    $default  reduce using rule 30 (args)
+
+    args  go to state 48
+    type  go to state 49
+
+
+State 31
+
+   28 spec_type__: STATIC type .
+   46 type: type . '[' ']'
+
+    '['  shift, and go to state 46
+
+    $default  reduce using rule 28 (spec_type__)
+
+
+State 32
+
+    9 declare: declare VOID MAIN . '(' args ')' compound
+
+    '('  shift, and go to state 50
+
+
+State 33
+
+   15 spec_decl__: spec_type_chk__ '(' . args ')' compound
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    $default  reduce using rule 30 (args)
+
+    args  go to state 51
+    type  go to state 49
+
+
+State 34
+
+   18 decl_impl: '=' . init_decl
+
+    ID       shift, and go to state 38
+    NEW      shift, and go to state 52
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+
+    init_decl   go to state 53
+    generic_id  go to state 43
+    const_expr  go to state 54
+
+
+State 35
+
+   19 decl_impl: ',' . id_list
+
+    ID  shift, and go to state 38
+
+    id_list        go to state 55
+    init_or_not__  go to state 56
+    id_list_init   go to state 57
+    generic_id     go to state 58
+
+
+State 36
+
+   14 spec_decl__: spec_type_chk__ decl_impl . ';'
+
+    ';'  shift, and go to state 59
+
+
+State 37
+
+    6 declare: declare final_decl__ ';' .
+
+    $default  reduce using rule 6 (declare)
+
+
+State 38
+
+   43 generic_id: ID .
+
+    $default  reduce using rule 43 (generic_id)
+
+
+State 39
+
+   25 final_decl__: final_decl_chk__ NEW . type arr_or_obj
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    type  go to state 60
+
+
+State 40
+
+   53 const_expr: INT_L .
+
+    $default  reduce using rule 53 (const_expr)
+
+
+State 41
+
+   54 const_expr: FLOAT_L .
+
+    $default  reduce using rule 54 (const_expr)
+
+
+State 42
+
+   55 const_expr: STR .
+
+    $default  reduce using rule 55 (const_expr)
+
+
+State 43
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   56 const_expr: generic_id .
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 56 (const_expr)
+
+
+State 44
+
+   24 final_decl__: final_decl_chk__ const_expr .
+   57 const_expr: const_expr . Infixop const_expr
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    $default  reduce using rule 24 (final_decl__)
+
+    Infixop  go to state 78
+
+
+State 45
+
+   16 spec_type_chk__: spec_type__ generic_id .
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 16 (spec_type_chk__)
+
+
+State 46
+
+   46 type: type '[' . ']'
+
+    ']'  shift, and go to state 79
+
+
+State 47
+
+   27 final_decl_chk__: FINAL type generic_id . $@3 '='
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 26 ($@3)
+
+    $@3  go to state 80
+
+
+State 48
+
+    8 declare: declare MAIN '(' args . ')' compound
+   32 args: args . ',' type generic_id
+
+    ')'  shift, and go to state 81
+    ','  shift, and go to state 82
+
+
+State 49
+
+   31 args: type . generic_id
+   46 type: type . '[' ']'
+
+    ID   shift, and go to state 38
+    '['  shift, and go to state 46
+
+    generic_id  go to state 83
+
+
+State 50
+
+    9 declare: declare VOID MAIN '(' . args ')' compound
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    $default  reduce using rule 30 (args)
+
+    args  go to state 84
+    type  go to state 49
+
+
+State 51
+
+   15 spec_decl__: spec_type_chk__ '(' args . ')' compound
+   32 args: args . ',' type generic_id
+
+    ')'  shift, and go to state 85
+    ','  shift, and go to state 82
+
+
+State 52
+
+   21 init_decl: NEW . type arr_or_obj
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    type  go to state 86
+
+
+State 53
+
+   18 decl_impl: '=' init_decl .
+
+    $default  reduce using rule 18 (decl_impl)
+
+
+State 54
+
+   20 init_decl: const_expr .
+   57 const_expr: const_expr . Infixop const_expr
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    '+'       [reduce using rule 20 (init_decl)]
+    '-'       [reduce using rule 20 (init_decl)]
+    $default  reduce using rule 20 (init_decl)
+
+    Infixop  go to state 78
+
+
+State 55
+
+   19 decl_impl: ',' id_list .
+   34 id_list: id_list . ',' init_or_not__
+
+    ','  shift, and go to state 87
+
+    $default  reduce using rule 19 (decl_impl)
+
+
+State 56
+
+   33 id_list: init_or_not__ .
+
+    $default  reduce using rule 33 (id_list)
+
+
+State 57
+
+   36 init_or_not__: id_list_init .
+   38 id_list_init: id_list_init . ',' generic_id '=' const_expr
+
+    ','  shift, and go to state 88
+
+    ','       [reduce using rule 36 (init_or_not__)]
+    $default  reduce using rule 36 (init_or_not__)
+
+
+State 58
+
+   35 init_or_not__: generic_id .
+   37 id_list_init: generic_id . '=' const_expr
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '='  shift, and go to state 89
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 35 (init_or_not__)
+
+
+State 59
+
+   14 spec_decl__: spec_type_chk__ decl_impl ';' .
+
+    $default  reduce using rule 14 (spec_decl__)
+
+
+State 60
+
+   25 final_decl__: final_decl_chk__ NEW type . arr_or_obj
+   46 type: type . '[' ']'
+
+    '('  shift, and go to state 90
+    '['  shift, and go to state 91
+
+    arr_or_obj  go to state 92
+
+
+State 61
+
+   44 generic_id: generic_id '[' . INT_L ']'
+
+    INT_L  shift, and go to state 93
+
+
+State 62
+
+   45 generic_id: generic_id '.' . ID
+
+    ID  shift, and go to state 94
+
+
+State 63
+
+   71 Infixop: AND .
+
+    $default  reduce using rule 71 (Infixop)
+
+
+State 64
+
+   69 Infixop: EQ .
+
+    $default  reduce using rule 69 (Infixop)
+
+
+State 65
+
+   68 Infixop: GE .
+
+    $default  reduce using rule 68 (Infixop)
+
+
+State 66
+
+   67 Infixop: LE .
+
+    $default  reduce using rule 67 (Infixop)
+
+
+State 67
+
+   70 Infixop: NE .
+
+    $default  reduce using rule 70 (Infixop)
+
+
+State 68
+
+   72 Infixop: OR .
+
+    $default  reduce using rule 72 (Infixop)
+
+
+State 69
+
+   58 Infixop: '+' .
+
+    $default  reduce using rule 58 (Infixop)
+
+
+State 70
+
+   59 Infixop: '-' .
+
+    $default  reduce using rule 59 (Infixop)
+
+
+State 71
+
+   60 Infixop: '*' .
+
+    $default  reduce using rule 60 (Infixop)
+
+
+State 72
+
+   61 Infixop: '/' .
+
+    $default  reduce using rule 61 (Infixop)
+
+
+State 73
+
+   62 Infixop: '%' .
+
+    $default  reduce using rule 62 (Infixop)
+
+
+State 74
+
+   63 Infixop: '>' .
+
+    $default  reduce using rule 63 (Infixop)
+
+
+State 75
+
+   64 Infixop: '<' .
+
+    $default  reduce using rule 64 (Infixop)
+
+
+State 76
+
+   65 Infixop: '&' .
+
+    $default  reduce using rule 65 (Infixop)
+
+
+State 77
+
+   66 Infixop: '|' .
+
+    $default  reduce using rule 66 (Infixop)
+
+
+State 78
+
+   57 const_expr: const_expr Infixop . const_expr
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+
+    generic_id  go to state 43
+    const_expr  go to state 95
+
+
+State 79
+
+   46 type: type '[' ']' .
+
+    $default  reduce using rule 46 (type)
+
+
+State 80
+
+   27 final_decl_chk__: FINAL type generic_id $@3 . '='
+
+    '='  shift, and go to state 96
+
+
+State 81
+
+    8 declare: declare MAIN '(' args ')' . compound
+
+    '{'  shift, and go to state 97
+
+    compound  go to state 98
+
+
+State 82
+
+   32 args: args ',' . type generic_id
+
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    VOID     shift, and go to state 28
+
+    type  go to state 99
+
+
+State 83
+
+   31 args: type generic_id .
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 31 (args)
+
+
+State 84
+
+    9 declare: declare VOID MAIN '(' args . ')' compound
+   32 args: args . ',' type generic_id
+
+    ')'  shift, and go to state 100
+    ','  shift, and go to state 82
+
+
+State 85
+
+   15 spec_decl__: spec_type_chk__ '(' args ')' . compound
+
+    '{'  shift, and go to state 97
+
+    compound  go to state 101
+
+
+State 86
+
+   21 init_decl: NEW type . arr_or_obj
+   46 type: type . '[' ']'
+
+    '('  shift, and go to state 90
+    '['  shift, and go to state 91
+
+    arr_or_obj  go to state 102
+
+
+State 87
+
+   34 id_list: id_list ',' . init_or_not__
+
+    ID  shift, and go to state 38
+
+    init_or_not__  go to state 103
+    id_list_init   go to state 57
+    generic_id     go to state 58
+
+
+State 88
+
+   38 id_list_init: id_list_init ',' . generic_id '=' const_expr
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 104
+
+
+State 89
+
+   37 id_list_init: generic_id '=' . const_expr
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+
+    generic_id  go to state 43
+    const_expr  go to state 105
+
+
+State 90
+
+   23 arr_or_obj: '(' . tuple ')'
+
+    $default  reduce using rule 39 (tuple)
+
+    tuple  go to state 106
+
+
+State 91
+
+   22 arr_or_obj: '[' . INT_L ']'
+   46 type: type '[' . ']'
+
+    INT_L  shift, and go to state 107
+    ']'    shift, and go to state 79
+
+
+State 92
+
+   25 final_decl__: final_decl_chk__ NEW type arr_or_obj .
+
+    $default  reduce using rule 25 (final_decl__)
+
+
+State 93
+
+   44 generic_id: generic_id '[' INT_L . ']'
+
+    ']'  shift, and go to state 108
+
+
+State 94
+
+   45 generic_id: generic_id '.' ID .
+
+    $default  reduce using rule 45 (generic_id)
+
+
+State 95
+
+   57 const_expr: const_expr . Infixop const_expr
+   57           | const_expr Infixop const_expr .
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    AND       [reduce using rule 57 (const_expr)]
+    EQ        [reduce using rule 57 (const_expr)]
+    GE        [reduce using rule 57 (const_expr)]
+    LE        [reduce using rule 57 (const_expr)]
+    NE        [reduce using rule 57 (const_expr)]
+    OR        [reduce using rule 57 (const_expr)]
+    '+'       [reduce using rule 57 (const_expr)]
+    '-'       [reduce using rule 57 (const_expr)]
+    '*'       [reduce using rule 57 (const_expr)]
+    '/'       [reduce using rule 57 (const_expr)]
+    '%'       [reduce using rule 57 (const_expr)]
+    '>'       [reduce using rule 57 (const_expr)]
+    '<'       [reduce using rule 57 (const_expr)]
+    '&'       [reduce using rule 57 (const_expr)]
+    '|'       [reduce using rule 57 (const_expr)]
+    $default  reduce using rule 57 (const_expr)
+
+    Infixop  go to state 78
+
+
+State 96
+
+   27 final_decl_chk__: FINAL type generic_id $@3 '=' .
+
+    $default  reduce using rule 27 (final_decl_chk__)
+
+
+State 97
+
+   13 compound: '{' . $@2 statement_star '}'
+
+    $default  reduce using rule 12 ($@2)
+
+    $@2  go to state 109
+
+
+State 98
+
+    8 declare: declare MAIN '(' args ')' compound .
+
+    $default  reduce using rule 8 (declare)
+
+
+State 99
+
+   32 args: args ',' type . generic_id
+   46 type: type . '[' ']'
+
+    ID   shift, and go to state 38
+    '['  shift, and go to state 46
+
+    generic_id  go to state 110
+
+
+State 100
+
+    9 declare: declare VOID MAIN '(' args ')' . compound
+
+    '{'  shift, and go to state 97
+
+    compound  go to state 111
+
+
+State 101
+
+   15 spec_decl__: spec_type_chk__ '(' args ')' compound .
+
+    $default  reduce using rule 15 (spec_decl__)
+
+
+State 102
+
+   21 init_decl: NEW type arr_or_obj .
+
+    $default  reduce using rule 21 (init_decl)
+
+
+State 103
+
+   34 id_list: id_list ',' init_or_not__ .
+
+    $default  reduce using rule 34 (id_list)
+
+
+State 104
+
+   38 id_list_init: id_list_init ',' generic_id . '=' const_expr
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '='  shift, and go to state 112
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+
+State 105
+
+   37 id_list_init: generic_id '=' const_expr .
+   57 const_expr: const_expr . Infixop const_expr
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    '+'       [reduce using rule 37 (id_list_init)]
+    '-'       [reduce using rule 37 (id_list_init)]
+    $default  reduce using rule 37 (id_list_init)
+
+    Infixop  go to state 78
+
+
+State 106
+
+   23 arr_or_obj: '(' tuple . ')'
+   40 tuple: tuple . INT_L
+   41      | tuple . FLOAT_L
+   42      | tuple . STR
+
+    INT_L    shift, and go to state 113
+    FLOAT_L  shift, and go to state 114
+    STR      shift, and go to state 115
+    ')'      shift, and go to state 116
+
+
+State 107
+
+   22 arr_or_obj: '[' INT_L . ']'
+
+    ']'  shift, and go to state 117
+
+
+State 108
+
+   44 generic_id: generic_id '[' INT_L ']' .
+
+    $default  reduce using rule 44 (generic_id)
+
+
+State 109
+
+   13 compound: '{' $@2 . statement_star '}'
+
+    $default  reduce using rule 73 (statement_star)
+
+    statement_star  go to state 118
+
+
+State 110
+
+   32 args: args ',' type generic_id .
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 32 (args)
+
+
+State 111
+
+    9 declare: declare VOID MAIN '(' args ')' compound .
+
+    $default  reduce using rule 9 (declare)
+
+
+State 112
+
+   38 id_list_init: id_list_init ',' generic_id '=' . const_expr
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+
+    generic_id  go to state 43
+    const_expr  go to state 119
+
+
+State 113
+
+   40 tuple: tuple INT_L .
+
+    $default  reduce using rule 40 (tuple)
+
+
+State 114
+
+   41 tuple: tuple FLOAT_L .
+
+    $default  reduce using rule 41 (tuple)
+
+
+State 115
+
+   42 tuple: tuple STR .
+
+    $default  reduce using rule 42 (tuple)
+
+
+State 116
+
+   23 arr_or_obj: '(' tuple ')' .
+
+    $default  reduce using rule 23 (arr_or_obj)
+
+
+State 117
+
+   22 arr_or_obj: '[' INT_L ']' .
+
+    $default  reduce using rule 22 (arr_or_obj)
+
+
+State 118
+
+   13 compound: '{' $@2 statement_star . '}'
+   74 statement_star: statement_star . compound
+   75               | statement_star . simple_call_decl ';'
+   76               | statement_star . conditional
+   77               | statement_star . loop
+   78               | statement_star . return
+   79               | statement_star . declare
+   80               | statement_star . ';'
+
+    error    shift, and go to state 120
+    FOR      shift, and go to state 121
+    ID       shift, and go to state 38
+    IF       shift, and go to state 122
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    RETURN   shift, and go to state 126
+    STR      shift, and go to state 42
+    WHILE    shift, and go to state 127
+    '{'      shift, and go to state 97
+    '}'      shift, and go to state 128
+    ';'      shift, and go to state 129
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    error    [reduce using rule 5 (declare)]
+    BOOLEAN  reduce using rule 5 (declare)
+    CHAR     reduce using rule 5 (declare)
+    CLASS    reduce using rule 5 (declare)
+    FINAL    reduce using rule 5 (declare)
+    FLOAT    reduce using rule 5 (declare)
+    FOR      [reduce using rule 5 (declare)]
+    ID       [reduce using rule 5 (declare)]
+    IF       [reduce using rule 5 (declare)]
+    INT      reduce using rule 5 (declare)
+    MAIN     reduce using rule 5 (declare)
+    MM       [reduce using rule 5 (declare)]
+    INT_L    [reduce using rule 5 (declare)]
+    FLOAT_L  [reduce using rule 5 (declare)]
+    PP       [reduce using rule 5 (declare)]
+    PRINT    [reduce using rule 5 (declare)]
+    RETURN   [reduce using rule 5 (declare)]
+    STATIC   reduce using rule 5 (declare)
+    STR      [reduce using rule 5 (declare)]
+    VOID     reduce using rule 5 (declare)
+    WHILE    [reduce using rule 5 (declare)]
+    '{'      [reduce using rule 5 (declare)]
+    '}'      [reduce using rule 5 (declare)]
+    ';'      [reduce using rule 5 (declare)]
+    '('      [reduce using rule 5 (declare)]
+    '+'      [reduce using rule 5 (declare)]
+    '-'      [reduce using rule 5 (declare)]
+
+    declare           go to state 133
+    compound          go to state 134
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 137
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+    conditional       go to state 141
+    if_expr__         go to state 142
+    if_simple__       go to state 143
+    if_compound__     go to state 144
+    loop              go to state 145
+    while_expr__      go to state 146
+    for_expr__        go to state 147
+    return            go to state 148
+
+
+State 119
+
+   38 id_list_init: id_list_init ',' generic_id '=' const_expr .
+   57 const_expr: const_expr . Infixop const_expr
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    '+'       [reduce using rule 38 (id_list_init)]
+    '-'       [reduce using rule 38 (id_list_init)]
+    $default  reduce using rule 38 (id_list_init)
+
+    Infixop  go to state 78
+
+
+State 120
+
+   95 expr: error .
+
+    $default  reduce using rule 95 (expr)
+
+
+State 121
+
+  118 for_expr__: FOR . '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')'
+
+    '('  shift, and go to state 149
+
+
+State 122
+
+  107 if_expr__: IF . '(' bool_expr ')'
+
+    '('  shift, and go to state 150
+
+
+State 123
+
+   86 simple_call_decl: MM . generic_id
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 151
+
+
+State 124
+
+   85 simple_call_decl: PP . generic_id
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 152
+
+
+State 125
+
+   90 simple_call_decl: PRINT . '(' expr ')'
+
+    '('  shift, and go to state 153
+
+
+State 126
+
+  125 return: RETURN . expr ';'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 154
+    term        go to state 139
+    factor      go to state 140
+
+
+State 127
+
+  117 while_expr__: WHILE . '(' bool_expr ')'
+
+    '('  shift, and go to state 155
+
+
+State 128
+
+   13 compound: '{' $@2 statement_star '}' .
+
+    $default  reduce using rule 13 (compound)
+
+
+State 129
+
+   80 statement_star: statement_star ';' .
+
+    $default  reduce using rule 80 (statement_star)
+
+
+State 130
+
+  100 factor: '(' . expr ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 156
+    term        go to state 139
+    factor      go to state 140
+
+
+State 131
+
+   87 simple_call_decl: '+' . generic_id
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 157
+
+
+State 132
+
+   88 simple_call_decl: '-' . generic_id
+
+    ID  shift, and go to state 38
+
+    generic_id  go to state 158
+
+
+State 133
+
+    6 declare: declare . final_decl__ ';'
+    7        | declare . spec_decl__
+    8        | declare . MAIN '(' args ')' compound
+    9        | declare . VOID MAIN '(' args ')' compound
+   10        | declare . class
+   11        | declare . error ';'
+   79 statement_star: statement_star declare .
+
+    error    shift, and go to state 9
+    BOOLEAN  shift, and go to state 10
+    CHAR     shift, and go to state 11
+    CLASS    shift, and go to state 3
+    FINAL    shift, and go to state 12
+    FLOAT    shift, and go to state 13
+    ID       shift, and go to state 14
+    INT      shift, and go to state 15
+    MAIN     shift, and go to state 16
+    STATIC   shift, and go to state 17
+    VOID     shift, and go to state 18
+
+    error    [reduce using rule 79 (statement_star)]
+    BOOLEAN  [reduce using rule 79 (statement_star)]
+    CHAR     [reduce using rule 79 (statement_star)]
+    CLASS    [reduce using rule 79 (statement_star)]
+    FINAL    [reduce using rule 79 (statement_star)]
+    FLOAT    [reduce using rule 79 (statement_star)]
+    FOR      reduce using rule 79 (statement_star)
+    ID       [reduce using rule 79 (statement_star)]
+    IF       reduce using rule 79 (statement_star)
+    INT      [reduce using rule 79 (statement_star)]
+    MAIN     [reduce using rule 79 (statement_star)]
+    MM       reduce using rule 79 (statement_star)
+    INT_L    reduce using rule 79 (statement_star)
+    FLOAT_L  reduce using rule 79 (statement_star)
+    PP       reduce using rule 79 (statement_star)
+    PRINT    reduce using rule 79 (statement_star)
+    RETURN   reduce using rule 79 (statement_star)
+    STATIC   [reduce using rule 79 (statement_star)]
+    STR      reduce using rule 79 (statement_star)
+    VOID     [reduce using rule 79 (statement_star)]
+    WHILE    reduce using rule 79 (statement_star)
+    '{'      reduce using rule 79 (statement_star)
+    '}'      reduce using rule 79 (statement_star)
+    ';'      reduce using rule 79 (statement_star)
+    '('      reduce using rule 79 (statement_star)
+    '+'      reduce using rule 79 (statement_star)
+    '-'      reduce using rule 79 (statement_star)
+
+    class             go to state 20
+    spec_decl__       go to state 21
+    spec_type_chk__   go to state 22
+    final_decl__      go to state 23
+    final_decl_chk__  go to state 24
+    spec_type__       go to state 25
+    type              go to state 26
+
+
+State 134
+
+   74 statement_star: statement_star compound .
+
+    $default  reduce using rule 74 (statement_star)
+
+
+State 135
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   56 const_expr: generic_id .
+   81 simple_call_decl: generic_id . '(' para_list ')'
+   82                 | generic_id . '=' simple_call_decl
+   83                 | generic_id . PP
+   84                 | generic_id . MM
+   91                 | generic_id . generic_id decl_impl
+
+    ID   shift, and go to state 38
+    MM   shift, and go to state 159
+    PP   shift, and go to state 160
+    '('  shift, and go to state 161
+    '='  shift, and go to state 162
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    ID        [reduce using rule 56 (const_expr)]
+    MM        [reduce using rule 56 (const_expr)]
+    PP        [reduce using rule 56 (const_expr)]
+    '('       [reduce using rule 56 (const_expr)]
+    $default  reduce using rule 56 (const_expr)
+
+    generic_id  go to state 163
+
+
+State 136
+
+   57 const_expr: const_expr . Infixop const_expr
+   99 factor: const_expr .
+
+    AND  shift, and go to state 63
+    EQ   shift, and go to state 64
+    GE   shift, and go to state 65
+    LE   shift, and go to state 66
+    NE   shift, and go to state 67
+    OR   shift, and go to state 68
+    '+'  shift, and go to state 69
+    '-'  shift, and go to state 70
+    '*'  shift, and go to state 71
+    '/'  shift, and go to state 72
+    '%'  shift, and go to state 73
+    '>'  shift, and go to state 74
+    '<'  shift, and go to state 75
+    '&'  shift, and go to state 76
+    '|'  shift, and go to state 77
+
+    '+'       [reduce using rule 99 (factor)]
+    '-'       [reduce using rule 99 (factor)]
+    '*'       [reduce using rule 99 (factor)]
+    '/'       [reduce using rule 99 (factor)]
+    $default  reduce using rule 99 (factor)
+
+    Infixop  go to state 78
+
+
+State 137
+
+   75 statement_star: statement_star simple_call_decl . ';'
+
+    ';'  shift, and go to state 164
+
+
+State 138
+
+   89 simple_call_decl: expr .
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+    '+'       [reduce using rule 89 (simple_call_decl)]
+    '-'       [reduce using rule 89 (simple_call_decl)]
+    $default  reduce using rule 89 (simple_call_decl)
+
+
+State 139
+
+   92 expr: term .
+   97 term: term . '*' factor
+   98     | term . '/' factor
+
+    '*'  shift, and go to state 167
+    '/'  shift, and go to state 168
+
+    $default  reduce using rule 92 (expr)
+
+
+State 140
+
+   96 term: factor .
+
+    $default  reduce using rule 96 (term)
+
+
+State 141
+
+   76 statement_star: statement_star conditional .
+
+    $default  reduce using rule 76 (statement_star)
+
+
+State 142
+
+  108 if_simple__: if_expr__ . simple_call_decl
+  109 if_compound__: if_expr__ . compound
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    STR      shift, and go to state 42
+    '{'      shift, and go to state 97
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    compound          go to state 169
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 170
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+
+
+State 143
+
+  101 conditional: if_simple__ .
+  102            | if_simple__ . else_simple__
+  103            | if_simple__ . else_compound__
+
+    ELSE  shift, and go to state 171
+
+    $default  reduce using rule 101 (conditional)
+
+    else_simple__    go to state 172
+    else_compound__  go to state 173
+
+
+State 144
+
+  104 conditional: if_compound__ .
+  105            | if_compound__ . else_simple__
+  106            | if_compound__ . else_compound__
+
+    ELSE  shift, and go to state 171
+
+    $default  reduce using rule 104 (conditional)
+
+    else_simple__    go to state 174
+    else_compound__  go to state 175
+
+
+State 145
+
+   77 statement_star: statement_star loop .
+
+    $default  reduce using rule 77 (statement_star)
+
+
+State 146
+
+  113 loop: while_expr__ . simple_call_decl
+  114     | while_expr__ . compound
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    STR      shift, and go to state 42
+    '{'      shift, and go to state 97
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    compound          go to state 176
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 177
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+
+
+State 147
+
+  115 loop: for_expr__ . simple_call_decl
+  116     | for_expr__ . compound
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    STR      shift, and go to state 42
+    '{'      shift, and go to state 97
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    compound          go to state 178
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 179
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+
+
+State 148
+
+   78 statement_star: statement_star return .
+
+    $default  reduce using rule 78 (statement_star)
+
+
+State 149
+
+  118 for_expr__: FOR '(' . ForInitOpt ';' bool_expr ';' ForUpdateOpt ')'
+
+    ID   shift, and go to state 38
+    INT  shift, and go to state 180
+
+    $default  reduce using rule 119 (ForInitOpt)
+
+    id_list_init  go to state 181
+    generic_id    go to state 182
+    ForInitOpt    go to state 183
+
+
+State 150
+
+  107 if_expr__: IF '(' . bool_expr ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 184
+    term        go to state 139
+    factor      go to state 140
+    bool_expr   go to state 185
+
+
+State 151
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   86 simple_call_decl: MM generic_id .
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 86 (simple_call_decl)
+
+
+State 152
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   85 simple_call_decl: PP generic_id .
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 85 (simple_call_decl)
+
+
+State 153
+
+   90 simple_call_decl: PRINT '(' . expr ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 186
+    term        go to state 139
+    factor      go to state 140
+
+
+State 154
+
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+  125 return: RETURN expr . ';'
+
+    ';'  shift, and go to state 187
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+
+State 155
+
+  117 while_expr__: WHILE '(' . bool_expr ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 184
+    term        go to state 139
+    factor      go to state 140
+    bool_expr   go to state 188
+
+
+State 156
+
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+  100 factor: '(' expr . ')'
+
+    ')'  shift, and go to state 189
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+
+State 157
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   87 simple_call_decl: '+' generic_id .
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 87 (simple_call_decl)
+
+
+State 158
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   88 simple_call_decl: '-' generic_id .
+
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 88 (simple_call_decl)
+
+
+State 159
+
+   84 simple_call_decl: generic_id MM .
+
+    $default  reduce using rule 84 (simple_call_decl)
+
+
+State 160
+
+   83 simple_call_decl: generic_id PP .
+
+    $default  reduce using rule 83 (simple_call_decl)
+
+
+State 161
+
+   81 simple_call_decl: generic_id '(' . para_list ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 190
+    term        go to state 139
+    factor      go to state 140
+    para_list   go to state 191
+
+
+State 162
+
+   82 simple_call_decl: generic_id '=' . simple_call_decl
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 192
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+
+
+State 163
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+   91 simple_call_decl: generic_id generic_id . decl_impl
+
+    '='  shift, and go to state 34
+    ','  shift, and go to state 35
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+    $default  reduce using rule 17 (decl_impl)
+
+    decl_impl  go to state 193
+
+
+State 164
+
+   75 statement_star: statement_star simple_call_decl ';' .
+
+    $default  reduce using rule 75 (statement_star)
+
+
+State 165
+
+   93 expr: expr '+' . term
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    term        go to state 194
+    factor      go to state 140
+
+
+State 166
+
+   94 expr: expr '-' . term
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    term        go to state 195
+    factor      go to state 140
+
+
+State 167
+
+   97 term: term '*' . factor
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    factor      go to state 196
+
+
+State 168
+
+   98 term: term '/' . factor
+
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    factor      go to state 197
+
+
+State 169
+
+  109 if_compound__: if_expr__ compound .
+
+    $default  reduce using rule 109 (if_compound__)
+
+
+State 170
+
+  108 if_simple__: if_expr__ simple_call_decl .
+
+    $default  reduce using rule 108 (if_simple__)
+
+
+State 171
+
+  110 else_simple__: ELSE . simple_call_decl
+  111 else_compound__: ELSE . compound
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    MM       shift, and go to state 123
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    PP       shift, and go to state 124
+    PRINT    shift, and go to state 125
+    STR      shift, and go to state 42
+    '{'      shift, and go to state 97
+    '('      shift, and go to state 130
+    '+'      shift, and go to state 131
+    '-'      shift, and go to state 132
+
+    compound          go to state 198
+    generic_id        go to state 135
+    const_expr        go to state 136
+    simple_call_decl  go to state 199
+    expr              go to state 138
+    term              go to state 139
+    factor            go to state 140
+
+
+State 172
+
+  102 conditional: if_simple__ else_simple__ .
+
+    $default  reduce using rule 102 (conditional)
+
+
+State 173
+
+  103 conditional: if_simple__ else_compound__ .
+
+    $default  reduce using rule 103 (conditional)
+
+
+State 174
+
+  105 conditional: if_compound__ else_simple__ .
+
+    $default  reduce using rule 105 (conditional)
+
+
+State 175
+
+  106 conditional: if_compound__ else_compound__ .
+
+    $default  reduce using rule 106 (conditional)
+
+
+State 176
+
+  114 loop: while_expr__ compound .
+
+    $default  reduce using rule 114 (loop)
+
+
+State 177
+
+  113 loop: while_expr__ simple_call_decl .
+
+    $default  reduce using rule 113 (loop)
+
+
+State 178
+
+  116 loop: for_expr__ compound .
+
+    $default  reduce using rule 116 (loop)
+
+
+State 179
+
+  115 loop: for_expr__ simple_call_decl .
+
+    $default  reduce using rule 115 (loop)
+
+
+State 180
+
+  121 ForInitOpt: INT . id_list_init
+
+    ID  shift, and go to state 38
+
+    id_list_init  go to state 200
+    generic_id    go to state 182
+
+
+State 181
+
+   38 id_list_init: id_list_init . ',' generic_id '=' const_expr
+  120 ForInitOpt: id_list_init .
+
+    ','  shift, and go to state 88
+
+    $default  reduce using rule 120 (ForInitOpt)
+
+
+State 182
+
+   37 id_list_init: generic_id . '=' const_expr
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+
+    '='  shift, and go to state 89
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+
+State 183
+
+  118 for_expr__: FOR '(' ForInitOpt . ';' bool_expr ';' ForUpdateOpt ')'
+
+    ';'  shift, and go to state 201
+
+
+State 184
+
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+  112 bool_expr: expr .
+
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+    $default  reduce using rule 112 (bool_expr)
+
+
+State 185
+
+  107 if_expr__: IF '(' bool_expr . ')'
+
+    ')'  shift, and go to state 202
+
+
+State 186
+
+   90 simple_call_decl: PRINT '(' expr . ')'
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+
+    ')'  shift, and go to state 203
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+
+State 187
+
+  125 return: RETURN expr ';' .
+
+    $default  reduce using rule 125 (return)
+
+
+State 188
+
+  117 while_expr__: WHILE '(' bool_expr . ')'
+
+    ')'  shift, and go to state 204
+
+
+State 189
+
+  100 factor: '(' expr ')' .
+
+    $default  reduce using rule 100 (factor)
+
+
+State 190
+
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+  126 para_list: expr .
+
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+    $default  reduce using rule 126 (para_list)
+
+
+State 191
+
+   81 simple_call_decl: generic_id '(' para_list . ')'
+  127 para_list: para_list . ',' expr
+
+    ')'  shift, and go to state 205
+    ','  shift, and go to state 206
+
+
+State 192
+
+   82 simple_call_decl: generic_id '=' simple_call_decl .
+
+    $default  reduce using rule 82 (simple_call_decl)
+
+
+State 193
+
+   91 simple_call_decl: generic_id generic_id decl_impl .
+
+    $default  reduce using rule 91 (simple_call_decl)
+
+
+State 194
+
+   93 expr: expr '+' term .
+   97 term: term . '*' factor
+   98     | term . '/' factor
+
+    '*'  shift, and go to state 167
+    '/'  shift, and go to state 168
+
+    $default  reduce using rule 93 (expr)
+
+
+State 195
+
+   94 expr: expr '-' term .
+   97 term: term . '*' factor
+   98     | term . '/' factor
+
+    '*'  shift, and go to state 167
+    '/'  shift, and go to state 168
+
+    $default  reduce using rule 94 (expr)
+
+
+State 196
+
+   97 term: term '*' factor .
+
+    $default  reduce using rule 97 (term)
+
+
+State 197
+
+   98 term: term '/' factor .
+
+    $default  reduce using rule 98 (term)
+
+
+State 198
+
+  111 else_compound__: ELSE compound .
+
+    $default  reduce using rule 111 (else_compound__)
+
+
+State 199
+
+  110 else_simple__: ELSE simple_call_decl .
+
+    $default  reduce using rule 110 (else_simple__)
+
+
+State 200
+
+   38 id_list_init: id_list_init . ',' generic_id '=' const_expr
+  121 ForInitOpt: INT id_list_init .
+
+    ','  shift, and go to state 88
+
+    $default  reduce using rule 121 (ForInitOpt)
+
+
+State 201
+
+  118 for_expr__: FOR '(' ForInitOpt ';' . bool_expr ';' ForUpdateOpt ')'
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 184
+    term        go to state 139
+    factor      go to state 140
+    bool_expr   go to state 207
+
+
+State 202
+
+  107 if_expr__: IF '(' bool_expr ')' .
+
+    $default  reduce using rule 107 (if_expr__)
+
+
+State 203
+
+   90 simple_call_decl: PRINT '(' expr ')' .
+
+    $default  reduce using rule 90 (simple_call_decl)
+
+
+State 204
+
+  117 while_expr__: WHILE '(' bool_expr ')' .
+
+    $default  reduce using rule 117 (while_expr__)
+
+
+State 205
+
+   81 simple_call_decl: generic_id '(' para_list ')' .
+
+    $default  reduce using rule 81 (simple_call_decl)
+
+
+State 206
+
+  127 para_list: para_list ',' . expr
+
+    error    shift, and go to state 120
+    ID       shift, and go to state 38
+    INT_L    shift, and go to state 40
+    FLOAT_L  shift, and go to state 41
+    STR      shift, and go to state 42
+    '('      shift, and go to state 130
+
+    generic_id  go to state 43
+    const_expr  go to state 136
+    expr        go to state 208
+    term        go to state 139
+    factor      go to state 140
+
+
+State 207
+
+  118 for_expr__: FOR '(' ForInitOpt ';' bool_expr . ';' ForUpdateOpt ')'
+
+    ';'  shift, and go to state 209
+
+
+State 208
+
+   93 expr: expr . '+' term
+   94     | expr . '-' term
+  127 para_list: para_list ',' expr .
+
+    '+'  shift, and go to state 165
+    '-'  shift, and go to state 166
+
+    $default  reduce using rule 127 (para_list)
+
+
+State 209
+
+  118 for_expr__: FOR '(' ForInitOpt ';' bool_expr ';' . ForUpdateOpt ')'
+
+    ID  shift, and go to state 38
+
+    $default  reduce using rule 122 (ForUpdateOpt)
+
+    generic_id    go to state 210
+    ForUpdateOpt  go to state 211
+
+
+State 210
+
+   44 generic_id: generic_id . '[' INT_L ']'
+   45           | generic_id . '.' ID
+  123 ForUpdateOpt: generic_id . PP
+  124             | generic_id . MM
+
+    MM   shift, and go to state 212
+    PP   shift, and go to state 213
+    '['  shift, and go to state 61
+    '.'  shift, and go to state 62
+
+
+State 211
+
+  118 for_expr__: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt . ')'
+
+    ')'  shift, and go to state 214
+
+
+State 212
+
+  124 ForUpdateOpt: generic_id MM .
+
+    $default  reduce using rule 124 (ForUpdateOpt)
+
+
+State 213
+
+  123 ForUpdateOpt: generic_id PP .
+
+    $default  reduce using rule 123 (ForUpdateOpt)
+
+
+State 214
+
+  118 for_expr__: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' .
+
+    $default  reduce using rule 118 (for_expr__)

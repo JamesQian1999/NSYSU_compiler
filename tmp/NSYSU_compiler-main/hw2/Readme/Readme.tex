@@ -1,0 +1,99 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{setspace}
+\usepackage{CJKutf8}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{amsthm,amssymb}
+\usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+\newenvironment{claim}[1]{\par\noindent{Claim:}\space#1}{}
+
+\font\mytitle=cmr12 at 36pt
+\definecolor{light-gray}{gray}{0.95}
+
+\title{\mytitle Homework 1 \\ Readme of \\ Simple Java -- Scanner}
+\author{Chih-Hsuan Yang\\
+National Sun-Yet-San University, Taiwan \\
+Instructor: Ye-In Chang
+}
+\begin{document}
+\begin{CJK}{UTF8}{bsmi}
+    \begin{spacing}{1.5}
+        \maketitle
+    \end{spacing}
+    \newpage
+    \tableofcontents
+    \newpage
+
+    % ==============================
+    \section{Lex \& Yacc version}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ lex --version \\
+            \input{|"lex --version"}\\
+            \$ bison -V \\
+            \input{|"bison -V"}
+        }
+    }
+
+    \section{Operating System}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cat /etc/os-release $\vert$ sed -En 's/PRET.*"(.*)"/$\backslash$1/p'
+            \verbatiminput{|"./showOS.sh"}
+        }
+    }
+
+    \section{Execution manual}
+    \subsection{Build}
+    \paragraph{Make}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ make
+        }
+    }
+
+    \paragraph{\LaTeX}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cd Readme\\
+            \$ make
+        }
+    }
+
+    \subsection{Run}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ make \# Build it first\\
+            \$ ./yacc.elf $<$ input.java
+        }
+    }
+
+    \section{How to implement}
+    Regex in Lex, BNF in Yacc, and std::unordered\_set std::vector in C++
+
+    \section{Problems}
+    \begin{enumerate}
+        \item Yacc 有毒。
+        \item It only can be written in GLR. It makes me very very confused to debug.
+        \item 仔細讀了一些 flex \& bison $($O'REILLY$)$ 的書之後，覺得作業規格書真是誤導人,甚至,sample output 也是錯的 \dots
+              比如說：\begin{enumerate}
+                  \item class 內部可以有 fields 跟 methods，但是呢，規格書說變數宣告屬於 fields，函式屬於 methods。如果按照如此實做，會遇到 Reduce/Reduce conflict。\\
+                        但是如果參考書中介紹，變數宣告與 methods 中的 function 合併成一個 non-terminal，就可以避免這個問題。
+                  \item 有幾個還可以爭論的點：比如 test5 的 z = ( x + y ) * 5 / 2 -- -y; 到底為什麼 sample output 是 accept, 為什麼 main 可以不用 type \dots
+                  \item 不過因為時間不多，要說改天在說吧。
+              \end{enumerate}
+    \end{enumerate}
+
+    \section{Outcome}
+    \lstinputlisting[showspaces=flase,
+        backgroundcolor=\color{light-gray},
+        basicstyle=\scriptsize,]{outcome}
+
+\end{CJK}
+\end{document}

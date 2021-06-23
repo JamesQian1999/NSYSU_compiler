@@ -1,0 +1,233 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{setspace}
+\usepackage{CJKutf8}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{amsthm,amssymb}
+\usepackage[a4paper,left=2cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+\renewcommand{\qedsymbol}{\rule{0.7em}{0.7em}}
+\newenvironment{claim}[1]{\par\noindent{Claim:}\space#1}{}
+
+\font\mytitle=cmr12 at 36pt
+\definecolor{light-gray}{gray}{0.95}
+
+\title{\mytitle Homework 1 \\ Readme of \\ Simple Java -- Scanner}
+\author{Chih-Hsuan Yang\\
+National Sun-Yet-San University, Taiwan \\
+Instructor: Ye-In Chang
+}
+
+\begin{document}
+\begin{CJK}{UTF8}{bsmi}
+    \begin{spacing}{1.5}
+        \maketitle
+    \end{spacing}
+    \newpage
+    \tableofcontents
+    \newpage
+
+    % ==============================
+    \section{Lex version}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ lex --version \\
+            \input{|"lex --version"}
+        }
+    }
+
+    \section{Operating System}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cat /etc/os-release $\vert$ sed -En 's/PRET.*"(.*)"/$\backslash$1/p'
+            \verbatiminput{|"./showOS.sh"}
+        }
+    }
+
+    \section{Execution manual}
+    \subsection{Build}
+    \paragraph{Symbol table}\mbox{(Already built, but if you want to compile it by yourself)}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cd lib \&\& mkdir build \&\& cd build\\
+            \$ cmake ..\\
+            \$ make \\
+            \$ mv libsymbol\_table.a ..
+        }
+    }
+    \paragraph{Lexer}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ flex -o lex.c B073040047.l\\
+            \$ gcc -c lex.c\\
+            \$ g++ lex.o lib/libsymbol\_table.a -lfl -o my\_lex.elf
+        }
+    }
+
+    \paragraph{\LaTeX}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cd Readme\\
+            \$ make
+        }
+    }
+
+    \subsection{Run}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ make \# Build it first\\
+            \$ ./my\_lex.elf $<$ input.java
+        }
+    }
+    \paragraph{Shared symbol table}\mbox{Static linking to your program}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ gcc lex.c -L./lib -lsymbol\_table -lfl -lstdc++ -static -Ofast -o my\_lex.elf \\
+            \$ ./my\_lex.elf $<$ input.java
+            % \$ LD\_LIBRARY\_PATH=./lib:\$LD\_LIBRARY\_PATH
+        }
+    }
+
+    \section{How to implement}
+    Regex in Lex and std::unordered\_set in C++
+
+    \section{Problems}
+    \begin{enumerate}
+        \item About the symbol table:
+              the requirement has said:\\
+              \fbox{
+                  \parbox{.9\textwidth}{
+                      create()     建立一個symbol table。\\
+                      lookup(s)    傳回字串s的index；假如s沒找到的話，就傳回-1。\\
+                      insert(s)    新增s到symbol table中，並傳回存放位置的index。\\
+                      dump()       將symbol table中所有的資料印出。
+                  }
+              }
+              \begin{enumerate}
+                  \item About the lookup(s) function:\\
+                        Why you need indexing? And how you do the index?\\
+                        The symbol table is a set mathematically. A set does not have any argument is called
+                        index.\\
+                        However, the requirement asked:\\
+                        \fbox{
+                            \parbox{.83\textwidth}{
+                                lookup(s)    傳回字串s的index；假如s沒找到的話，就傳回-1。\\
+                            }
+                        }
+                        Why?\\
+                        How can I return an index of a set?\\
+                        What is the index of an element in a set?
+                  \item About the create() function:\\
+                        This is an implementation issue.\\
+                        According to the RAII pattern: In RAII, holding a resource is a
+                        class invariant, and is tied to object lifetime: resource allocation
+                        (or acquisition) is done during object creation (specifically
+                        initialization), by the constructor, while resource deallocation
+                        (release) is done during object destruction (specifically finalization),
+                        by the destructor. \\
+                        Therefore, request a function to construct an object, but not destruct
+                        is unreasonable. It would cause the memory leaking issue.
+
+                  \item About the dump() function:\\
+                        Well, this is a naming issue.\\
+                        We use the word "dump" in programming, that means some error(s)
+                        happened, and we would get some information about the "crash" event.
+                        However, there is no "crash" happened while we were printing the
+                        symbol table, right?\\
+                        Hence, we shouldn't take the "dump" to be the function name.\\
+                        For clean code, we should named it as "export" or "view". Which
+                        give users a decision to handle the exported table, no matter they
+                        want to "print", "store" etc.\\
+                        Again, we shouldn't use "dump" here.
+              \end{enumerate}
+
+        \item The GNU Flex does not fully support POSIX:\\
+              I tried $[$:alpha:$]$ for $[$A-Za-z$]$ in regex. However, the flex does
+              not support.\\
+              And I tried the dollar sign '\$' for the "End-of-line". However, the flex
+              does not support too.
+
+        \item The test file is DOS format:\\
+              Well, this is not a mistake. I just do not want to precessing these formatting issues.
+              Every UNIX(-like) system are using '$\backslash$n' as newline. I don't want
+              to add a special for DOS format.
+
+        \item The invalid ID is not reasonable and not completeness:\\
+              The regex is followed by "longest match rule", that is, suppose there is a string $S$,
+              which is concatenated by 2 substring $A$, $B$.  $$S = A \mathbin\Vert B$$
+              And, two patterns $P_1$ and $P_2$, which can match $S$ and $A$. Given a
+              string $S$ for these 2 patterns, we will get $S$ in $P_1$ rather than $A$.\\
+              \begin{claim}
+                  \underline{The negation of a regex is almost-surely match all string.}
+              \end{claim}
+              \begin{proof}
+                  Suppose there are 2 patterns $P$ and $Q$. $\mathbb{P}$ and $\mathbb{Q}$ are the
+                  set of regex $P$ and $Q$. The $\mathbb{P} \not\subset \mathbb{Q}$,
+                  $\mathbb{Q} \not\subset \mathbb{P}$.
+                  And we define a symbol $\neg$ is the inversion set, that is, $\neg \mathbb{P} = \{\mathbb{U}
+                      \setminus \mathbb{P}\}$. $\mathbb{U}$ is the universal set of any regex set.\\
+                  $$\neg \mathbb{P} = \{\mathbb{U} \setminus \mathbb{P}\}$$
+                  $$\Rightarrow \mathbb{Q} \subseteq \neg \mathbb{P}$$
+                  $\forall S = A \mathbin\Vert B = {\neg \mathbb{P}}^*$. There are two possibilities:
+                  $B = \mathbb{U}^+$ or $B = \epsilon$.\\
+                  Consider $B = \mathbb{U}^+$:\\
+                  Obviously, call the regex matching recursively until $B = \epsilon$ go to the next possibility, otherwise:
+                  \begin{equation}
+                      S \not\in \mathbb{Q} \land S \in \neg\mathbb{P}
+                  \end{equation}
+
+                  Consider $B = \epsilon$ :\\
+                  There are another two possibilities:
+                  \begin{enumerate}
+                      \item The state of $Q$ is terminated ($\perp$)
+                      \item The state of $Q$ is not terminated ($\not\perp$).
+                  \end{enumerate}
+
+                  If $Q$ is $\perp$:
+                  Both $S \in \neg \mathbb{P}$ and $S \in \mathbb{Q}$ are correct.
+                  \begin{equation}
+                      S \in \neg \mathbb{P} \land S \in \mathbb{Q}
+                  \end{equation}
+
+                  If $Q$ is $\not\perp$: Only if $S \in \neg\mathbb{P}$
+                  \begin{equation}
+                      S \not\in \mathbb{Q} \land S \in \neg\mathbb{P}
+                  \end{equation}
+
+                  And if we want to get $S$ from regex $Q$, only if
+                  $\mathbin\Vert S \mathbin\Vert = \mathbin\Vert Q \mathbin\Vert$.
+                  However,
+                  $$P(\mathbin\Vert S \mathbin\Vert = \mathbin\Vert Q \mathbin\Vert)=0$$
+                  $$\Rightarrow P(S = \{\exists \omega \in \neg \mathbb{P} \ | \lim_{n \to \infty} \neg \mathbb{P}_{n}(\omega) \}) = 1$$
+
+                  By definition, that is almost-surely convergence to $S \in \neg\mathbb{P}$.
+              \end{proof}
+
+              To simplify in one table:\\
+              \begin{center}
+                  \begin{tabularx}{6cm} {
+                          | >{\raggedright\arraybackslash}X
+                          | >{\centering\arraybackslash}X
+                          | >{\raggedleft\arraybackslash}X |}
+                      \hline
+                      \mbox{}     & $\mathbb{Q}$     & $\mathbb{Q}^{\perp}$                \\
+                      \hline
+                      $B$         & Recursion        & $\neg\mathbb{P}$                    \\
+                      \hline
+                      $B^{\perp}$ & $\neg\mathbb{P}$ & $\neg\mathbb{P}$ or    $\mathbb{Q}$ \\
+                      \hline
+                  \end{tabularx}
+              \end{center}
+    \end{enumerate}
+
+    \section{Outcome}
+    \lstinputlisting[showspaces=flase,
+        backgroundcolor=\color{light-gray},
+        basicstyle=\scriptsize,]{outcome}
+
+\end{CJK}
+\end{document}

@@ -1,0 +1,141 @@
+rm -rf lib/build B073040047.tab.o lex.o my_yacc.elf lex.c
+rm -f B073040047.tab.c B073040047.tab.h B073040047.output B073040047.dot B073040047.jpg
+bison -g -vd -Wnone B073040047.y
+gcc -c B073040047.tab.c
+flex -o lex.c B073040047.l
+gcc -c lex.c
+gcc B073040047.tab.o lex.o lib/libsymbol_table.a -lfl -ly -lstdc++ -static -o my_yacc.elf
+for i in $(seq 1 6); do ./my_yacc.elf < Testfile/test$i.java; echo; done
+1: /* Test file: Perfect test file
+2:  * Compute sum = 1 + 2 + ... + n
+3:  */3: 
+4: class sigma {
+5:   // "final" should have const_expr
+5:   final int n = 10;
+6:   int sum, index;
+7: 
+8:   main()
+9:   {
+10:     index = 0;
+11:     sum = 0;
+12:     while (index <= n)
+13:     {
+14:       sum = sum + index;
+15:       index = index + 1;
+16:     }
+17:     print(sum);
+18:   }
+19: }
+
+1: /*Test file: Duplicate declare variable in the same scope*/1: 
+2: class Point
+3: {
+4:     static int counter ;
+5:     int x, y ;
+6:     /*Duplicate declare x*/6: 
+duplicate id.
+7:     int x ;
+8:     void clear()
+9:     {
+10:         x = 0 ;
+11:         y = 0 ;
+12:     }
+13: }
+
+1: /*Test file of Syntax errer: Out of symbol.  But it can go through*/1: 
+2: class Point {
+3:     int z;
+syntax error, unexpected ID, expecting ';'
+4:     int x y ;
+5:     /*Need  ',' before y*/5: 
+6:     float w;
+7: }
+8: class Test {
+9:     int d;
+10:     Point p = new Point()
+11:     /*Need ';' at EOL*/11: 
+syntax error, unexpected INT, expecting ';'
+12:     int w,q;
+13: }
+
+1: /*Test file: Duplicate declaration in different scope and same scope*/1: 
+2: class Point
+3: {
+4: 	int x, y ;
+5: 	int p;
+6: 	boolean test()
+7: 	{	
+8: 		/*Another x, but in different scopes*/8: 
+9: 		int x;
+10: 		/*Another x in the same scope*/10: 
+duplicate id.
+11: 		char x;
+12: 		{
+13: 			boolean w;
+14: 		}
+15: 		/*Another w in the same scope*/15: 
+16: 		int w;
+17: 	}
+18: }
+19: class Test
+20: {
+21: 	/*Another p, but in different scopes*/21: 
+22: 	Point p = new Point();
+23: }
+
+1: class test5{
+2:     int add(int a1, int a2){
+3:         return (a1 + a2);
+4:     }
+5:     void main() {
+6:         int x, y, z;
+7:         for(int i=0;i<2;i++){
+8:             if(i==0){
+9: //--------------ELSE WITHOUT IF
+syntax error, unexpected ELSE
+9:                 else
+10:                     i = 1;
+11:             }
+12:             for(x = 0; x<5;x++){
+13:                 y++;
+14: //--------------FUNCTION CALL
+14:                 x = add(x,y);
+15:                 x = z(x,y);
+16:             }
+17:         }
+18:         print("x:"+x+"y:"+y);
+syntax error, unexpected MM, expecting ';'
+19:         z = ( x + y ) * 5 / 2 -- -y;
+20:     }
+21: }
+22: 
+23: /* this is a comment // line// with some /* /*and
+24: // delimiters */24: 
+
+1: class test6{
+2:     void sum(){
+3: //------NEVER USED
+3:         int sumxyz = x + y + z ;
+4:     }
+5:     void main() {
+6: //------ARRAY
+6:         int [] i= new int [1];
+7:         for(i[0] = 0; i[0]<5; i[0]++)
+8:             i[0]++;
+9: 
+10: //------NEW CLASS
+10:         Point lowerLeft = new Point() ;
+11: 
+12: //------ERROR CONDITION
+syntax error, unexpected '*'
+12:         while(**/a++){
+13:             print("error!!");
+14:         }
+15: //------CLASS DECLARE
+15:         class Point {
+16:             int x, y, z;
+17:         }
+18:     }
+19: 
+20: }
+
